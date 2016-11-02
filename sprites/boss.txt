@@ -1,0 +1,291 @@
+boss.png
+
+Dir 1	; animation name
+1	; animation id code
+0,0	; animation frame start position
+195,173	; single frame size
+195,174	; step
+1,2	; rows cols
+-1	; total number of frames
+100	; frame change speed
+	
+Dir 2	; animation name
+2	; animation id code
+0,174	; animation frame start position
+195,173	; single frame size
+195,174	; step
+1,2	; rows cols
+-1	; total number of frames
+100	; frame change speed
+	
+Dir 3	; animation name
+3	; animation id code
+0,348	; animation frame start position
+195,173	; single frame size
+195,174	; step
+1,2	; rows cols
+-1	; total number of frames
+100	; frame change speed
+	
+Dir 4	; animation name
+4	; animation id code
+0,522	; animation frame start position
+195,173	; single frame size
+195,174	; step
+1,2	; rows cols
+-1	; total number of frames
+100	; frame change speed
+	
+Dir 5	; animation name
+5	; animation id code
+0,696	; animation frame start position
+195,173	; single frame size
+195,174	; step
+1,2	; rows cols
+-1	; total number of frames
+100	; frame change speed
+	
+Dir 6	; animation name
+6	; animation id code
+0,870	; animation frame start position
+195,173	; single frame size
+195,174	; step
+1,2	; rows cols
+-1	; total number of frames
+100	; frame change speed
+	
+Dir 7	; animation name
+7	; animation id code
+0,1044	; animation frame start position
+195,173	; single frame size
+195,174	; step
+1,2	; rows cols
+-1	; total number of frames
+100	; frame change speed
+	
+Dir 8	; animation name
+8	; animation id code
+0,1218	; animation frame start position
+195,173	; single frame size
+195,174	; step
+1,2	; rows cols
+-1	; total number of frames
+100	; frame change speed
+	
+Dir 9	; animation name
+9	; animation id code
+0,1392	; animation frame start position
+195,173	; single frame size
+195,174	; step
+1,2	; rows cols
+-1	; total number of frames
+100	; frame change speed
+	
+Dir 10	; animation name
+10	; animation id code
+0,1566	; animation frame start position
+195,173	; single frame size
+195,174	; step
+1,2	; rows cols
+-1	; total number of frames
+100	; frame change speed
+	
+Dir 11	; animation name
+11	; animation id code
+0,1740	; animation frame start position
+195,173	; single frame size
+195,174	; step
+1,2	; rows cols
+-1	; total number of frames
+100	; frame change speed
+	
+Dir 12	; animation name
+12	; animation id code
+0,1914	; animation frame start position
+195,173	; single frame size
+195,174	; step
+1,2	; rows cols
+-1	; total number of frames
+100	; frame change speed
+	
+Dir 13	; animation name
+13	; animation id code
+0,2088	; animation frame start position
+195,173	; single frame size
+195,174	; step
+1,2	; rows cols
+-1	; total number of frames
+100	; frame change speed
+	
+Dir 14	; animation name
+14	; animation id code
+0,2262	; animation frame start position
+195,173	; single frame size
+195,174	; step
+1,2	; rows cols
+-1	; total number of frames
+100	; frame change speed
+	
+Dir 15	; animation name
+15	; animation id code
+0,2436	; animation frame start position
+195,173	; single frame size
+195,174	; step
+1,2	; rows cols
+-1	; total number of frames
+100	; frame change speed
+	
+Dir 16	; animation name
+16	; animation id code
+0,2610	; animation frame start position
+195,173	; single frame size
+195,174	; step
+1,2	; rows cols
+-1	; total number of frames
+100	; frame change speed
+	
+Dir 17	; animation name
+17	; animation id code
+0,2784	; animation frame start position
+195,173	; single frame size
+195,174	; step
+1,2	; rows cols
+-1	; total number of frames
+100	; frame change speed
+	
+Dir 18	; animation name
+18	; animation id code
+0,2958	; animation frame start position
+195,173	; single frame size
+195,174	; step
+1,2	; rows cols
+-1	; total number of frames
+100	; frame change speed
+	
+Dir 19	; animation name
+19	; animation id code
+0,3132	; animation frame start position
+195,173	; single frame size
+195,174	; step
+1,2	; rows cols
+-1	; total number of frames
+100	; frame change speed
+	
+Dir 20	; animation name
+20	; animation id code
+0,3306	; animation frame start position
+195,173	; single frame size
+195,174	; step
+1,2	; rows cols
+-1	; total number of frames
+100	; frame change speed
+	
+Dir 21	; animation name
+21	; animation id code
+0,3480	; animation frame start position
+195,173	; single frame size
+195,174	; step
+1,2	; rows cols
+-1	; total number of frames
+100	; frame change speed
+	
+Dir 22	; animation name
+22	; animation id code
+0,3654	; animation frame start position
+195,173	; single frame size
+195,174	; step
+1,2	; rows cols
+-1	; total number of frames
+100	; frame change speed
+	
+Dir 23	; animation name
+23	; animation id code
+0,3828	; animation frame start position
+195,173	; single frame size
+195,174	; step
+1,2	; rows cols
+-1	; total number of frames
+100	; frame change speed
+	
+Dir 24	; animation name
+24	; animation id code
+0,4002	; animation frame start position
+195,173	; single frame size
+195,174	; step
+1,2	; rows cols
+-1	; total number of frames
+100	; frame change speed
+	
+Dir 25	; animation name
+25	; animation id code
+0,4176	; animation frame start position
+195,173	; single frame size
+195,174	; step
+1,2	; rows cols
+-1	; total number of frames
+100	; frame change speed
+	
+Dir 26	; animation name
+26	; animation id code
+0,4350	; animation frame start position
+195,173	; single frame size
+195,174	; step
+1,2	; rows cols
+-1	; total number of frames
+100	; frame change speed
+	
+Dir 27	; animation name
+27	; animation id code
+0,4524	; animation frame start position
+195,173	; single frame size
+195,174	; step
+1,2	; rows cols
+-1	; total number of frames
+100	; frame change speed
+	
+Dir 28	; animation name
+28	; animation id code
+0,4698	; animation frame start position
+195,173	; single frame size
+195,174	; step
+1,2	; rows cols
+-1	; total number of frames
+100	; frame change speed
+	
+Dir 29	; animation name
+29	; animation id code
+0,4872	; animation frame start position
+195,173	; single frame size
+195,174	; step
+1,2	; rows cols
+-1	; total number of frames
+100	; frame change speed
+	
+Dir 30	; animation name
+30	; animation id code
+0,5046	; animation frame start position
+195,173	; single frame size
+195,174	; step
+1,2	; rows cols
+-1	; total number of frames
+100	; frame change speed
+	
+Dir 31	; animation name
+31	; animation id code
+0,5220	; animation frame start position
+195,173	; single frame size
+195,174	; step
+1,2	; rows cols
+-1	; total number of frames
+100	; frame change speed
+	
+Dir 32	; animation name
+32	; animation id code
+0,5394	; animation frame start position
+195,173	; single frame size
+195,174	; step
+1,2	; rows cols
+-1	; total number of frames
+100	; frame change speed
+
+#

@@ -1,0 +1,12 @@
+lightning.png
+
+Cycle		; animation name
+1		; animation ID code
+0,0 		; animation frame start position
+32,256 		; single frame size
+32,0		; advancement step ( usually frame size )
+1,15		; number of rows and cols of frames
+-1		; Total number of frames ( -1 set to rows*cols )
+50		; frame change speed ( millis )
+
+#

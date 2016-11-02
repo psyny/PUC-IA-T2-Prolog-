@@ -1,0 +1,11 @@
+grid.png
+
+Grid		; Set Name
+1		; Set ID code
+3,3 		; Set start position
+310,160 	; Single tile size
+316,167		; Advancement step ( usually = tile size )
+1,3		; Number of rows and cols of Tiles in Image
+-1		; Total number of tiles ( -1 set to rows*cols )
+
+#

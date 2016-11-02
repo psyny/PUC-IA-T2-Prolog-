@@ -1,0 +1,10 @@
+upgrade.png
+
+Cycle		; animation name
+1		; animation ID code
+0,0 		; animation frame start position
+120,110		; single frame size
+120,110		; advancement step ( usually frame size )
+3,5		; number of rows and cols of frames
+-1		; Total number of frames ( -1 set to rows*cols )
+100		; frame change speed ( millis )

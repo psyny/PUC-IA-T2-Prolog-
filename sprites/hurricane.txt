@@ -1,0 +1,10 @@
+hurricane.png
+
+Cycle		; animation name
+1		; animation ID code
+0,0 		; animation frame start position
+350,299 	; single frame size
+350,299		; advancement step ( usually frame size )
+3,4		; number of rows and cols of frames
+-1		; Total number of frames ( -1 set to rows*cols )
+80		; frame change speed ( millis )

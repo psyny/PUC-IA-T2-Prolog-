@@ -1,0 +1,19 @@
+testTiles.png
+
+Clean Tiles	; Set Name
+1		; Set ID code
+0,0 		; Set start position
+75,39 		; Single tile size
+76,40		; Advancement step ( usually = tile size )
+7,8		; Number of rows and cols of Tiles in Image
+-1		; Total number of tiles ( -1 set to rows*cols )
+
+Debris		; Set Name
+2		; Set ID code
+0,280 		; Set start position
+75,39 		; Single tile size
+76,40		; Advancement step ( usually = tile size )
+5,4		; Number of rows and cols of Tiles in Image
+-1		; Total number of tiles ( -1 set to rows*cols )
+
+#		; End of File Mark

@@ -1,0 +1,10 @@
+water.png
+
+Cycle		; animation name
+1		; animation ID code
+0,0 		; animation frame start position
+64,93 		; single frame size
+64,93		; advancement step ( usually frame size )
+2,12		; number of rows and cols of frames
+-1		; Total number of frames ( -1 set to rows*cols )
+40		; frame change speed ( millis )

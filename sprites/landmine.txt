@@ -1,0 +1,12 @@
+landmine.png
+
+Cycle		; animation name
+10		; animation ID code
+0,0 		; animation frame start position
+36,36 		; single frame size
+36,36		; advancement step ( usually frame size )
+1,8		; number of rows and cols of frames
+-1		; Total number of frames ( -1 set to rows*cols )
+120		; frame change speed ( millis )
+
+#

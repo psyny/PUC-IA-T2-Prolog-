@@ -1,0 +1,57 @@
+storm.png
+
+Cycle		; animation name
+1		; animation ID code
+3,3 		; animation frame start position
+310,160		; single frame size
+316,167		; advancement step ( usually frame size )
+1,10		; number of rows and cols of frames
+-1		; Total number of frames ( -1 set to rows*cols )
+50		; frame change speed ( millis )
+
+Weak		; animation name
+2		; animation ID code
+3,169 		; animation frame start position
+310,160		; single frame size
+316,167		; advancement step ( usually frame size )
+1,10		; number of rows and cols of frames
+-1		; Total number of frames ( -1 set to rows*cols )
+50		; frame change speed ( millis )
+
+Border1		; animation name
+11		; animation ID code
+3,335 		; animation frame start position
+310,160		; single frame size
+316,167		; advancement step ( usually frame size )
+1,10		; number of rows and cols of frames
+-1		; Total number of frames ( -1 set to rows*cols )
+50		; frame change speed ( millis )
+
+Border2		; animation name
+12		; animation ID code
+3,501 		; animation frame start position
+310,160		; single frame size
+316,167		; advancement step ( usually frame size )
+1,10		; number of rows and cols of frames
+-1		; Total number of frames ( -1 set to rows*cols )
+50		; frame change speed ( millis )
+
+Border3		; animation name
+13		; animation ID code
+3,667 		; animation frame start position
+310,160		; single frame size
+316,167		; advancement step ( usually frame size )
+1,10		; number of rows and cols of frames
+-1		; Total number of frames ( -1 set to rows*cols )
+50		; frame change speed ( millis )
+
+Border4		; animation name
+14		; animation ID code
+3,833 		; animation frame start position
+310,160		; single frame size
+316,167		; advancement step ( usually frame size )
+1,10		; number of rows and cols of frames
+-1		; Total number of frames ( -1 set to rows*cols )
+50		; frame change speed ( millis )
+
+#

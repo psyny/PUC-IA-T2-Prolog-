@@ -1,0 +1,30 @@
+sensors.png
+
+Wind		; animation name
+1		; animation ID code
+0,0 		; animation frame start position
+56,56		; single frame size
+56,56		; advancement step ( usually frame size )
+1,6		; number of rows and cols of frames
+-1		; Total number of frames ( -1 set to rows*cols )
+50		; frame change speed ( millis )
+
+Mine		; animation name
+2		; animation ID code
+0,56 		; animation frame start position
+56,56		; single frame size
+56,56		; advancement step ( usually frame size )
+1,6		; number of rows and cols of frames
+-1		; Total number of frames ( -1 set to rows*cols )
+50		; frame change speed ( millis )
+
+Enemy		; animation name
+3		; animation ID code
+0,112 		; animation frame start position
+56,56		; single frame size
+56,56		; advancement step ( usually frame size )
+1,6		; number of rows and cols of frames
+-1		; Total number of frames ( -1 set to rows*cols )
+50		; frame change speed ( millis )
+
+#
