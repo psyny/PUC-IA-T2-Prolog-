@@ -28,5 +28,5 @@ public class Singletons {
 	public static int 		heroLife		= 100;
 	public static int		heroScore		= 0;
 	public static IVector2D	heroPosition	= new IVector2D( 0, 0 );
-	public static int		heroDirection	= 4;
+	public static int		heroDirection	= 1;
 }

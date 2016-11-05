@@ -6,6 +6,7 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
@@ -21,6 +22,8 @@ import dataTypes.IVector2D;
 @SuppressWarnings("serial")
 public class GUI_APPWindow extends JFrame {
 	static GUI_APPWindow APPWin;
+	
+	public static boolean loaded = false;
 	
 	public GUI_APPWindow() {
     	setSize(1024, 768);
@@ -96,7 +99,9 @@ public class GUI_APPWindow extends JFrame {
             	// Start the sync
             	UpdateLinker.start();
             	
-
+            	// Call loaded
+            	GUI_APPWindow.loaded = true;
+            	Toolkit.getDefaultToolkit().sync();
             }
         });
 	}

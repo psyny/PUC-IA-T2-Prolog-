@@ -5,6 +5,16 @@ import java.util.ArrayList;
 import user_interface.*;
 
 public class Cell {
+	public class AStarData {
+		public int 		direction;
+		public Cell		predecessor = null;
+		public int		costToEnter = 0;
+		public int		accumulatedCost = 0;
+		public int		heuristicFinalCost = 0;
+		public int		type = 0; // 0 = undiscovered , 1 = passed , 2 = frontier
+	}
+	
+	
 	// Apenas para Consulta
 	public IVector2D 			position = new IVector2D( 0 , 0 );
 	public CellType 			type = CellType.CLEAN;
@@ -12,6 +22,7 @@ public class Cell {
 	// Atualizar com o ProLog
 	public boolean		discovered = false;
 	public boolean		destroyed = false;
+	public AStarData	ASData = new AStarData();
 	
 	// Dados do RAFAEL
 	public ArrayList<ActorSensor> 		sensorList = new ArrayList<ActorSensor>();
@@ -60,5 +71,13 @@ public class Cell {
 			}
 		}
 		return false;
+	}
+	
+	public boolean isSameOf( Cell cell ) {
+		if( this.position.x == cell.position.x && this.position.y == cell.position.y ) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }
