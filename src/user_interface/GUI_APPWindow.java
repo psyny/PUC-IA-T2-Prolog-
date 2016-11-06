@@ -19,6 +19,8 @@ import data.UpdateLinker;
 import dataTypes.Cell;
 import dataTypes.IVector2D;
 
+
+
 @SuppressWarnings("serial")
 public class GUI_APPWindow extends JFrame {
 	static GUI_APPWindow APPWin;
@@ -49,6 +51,7 @@ public class GUI_APPWindow extends JFrame {
 	
 	
 	public static void startUI() {
+		
     	// Load Data
     	MapLoader.loadFile();
     	IVector2D sceneSize = IsoGrid.getOrtogonalSize();	
@@ -74,7 +77,7 @@ public class GUI_APPWindow extends JFrame {
                 // Camera Controls
                 Singletons.gameCamera = new Camera( mainScene , 0 , 0 ); 
                 Camera gameCamera = Singletons.gameCamera;
-                gameCamera.setBounds(0, 0, 1010 , 730);
+                gameCamera.setBounds(0, 0, 1010 , 720);
                 gameCamera.setTarget( 0 , 0 );
                 
                 mainContentPane.add( gameCamera );

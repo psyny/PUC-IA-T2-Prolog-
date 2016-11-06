@@ -1,4 +1,5 @@
 import java.awt.EventQueue;
+import java.awt.event.WindowEvent;
 
 import javax.swing.*;
 import animation.*;
@@ -9,18 +10,29 @@ import debug.DebugMap;
 import prolog.AStar;
 import prolog.AStarPath;
 import user_interface.GUI_APPWindow;
+import user_interface.Splash;
 
 public class APP extends JFrame {
 
 	public static void main(String[] args) throws InterruptedException {
 		System.out.println("Programa iniciado");
 		
+		// Splash Screen
+		Splash.start();
+    	while( Splash.loaded == false ) {
+    		Thread.sleep(100);
+    	}
+		
 		// Inicia a interface grafica e aguarda seu carregamento
 		GUI_APPWindow.startUI();
     	while( GUI_APPWindow.loaded == false ) {
     		Thread.sleep(100);
     	}
-    		
+    	while( Splash.finished == false ) {
+    		Thread.sleep(100);
+    	}
+    	Splash.splash.dispatchEvent(new WindowEvent(Splash.splash, WindowEvent.WINDOW_CLOSING));
+    	
     	// Exemplo de alterações nos dados e q interface atualizado de acordo
     	/*    	
     	IVector2D pPos = new IVector2D( Singletons.heroPosition.x , Singletons.heroPosition.y );
