@@ -50,7 +50,7 @@ acao(subir) :-	posicao(X, Y), X = 1, Y = 1, write('O Agente saiu da caverna, que
 
 acao(atirar) :-	municao(X), X > 0, adiciona_a_score(-10), findall(_,simula_tiro(),_), remove_municao().
 
-acao(decidir) :-	total_ouros(X), X =< -10, findall(_,retract(proximo_passo(_,_)),_), findall(_, encontrar_mais_proximo(certeza(saida)) ,_), !.
+acao(decidir) :-	total_ouros(X), X =< 0, findall(_,retract(proximo_passo(_,_)),_), findall(_, encontrar_mais_proximo(certeza(saida)) ,_), !.
 acao(decidir) :-	posicao(Z, W), mapa_agente((Z, W), certeza(ouro)), acao(pegar_objeto), acao(decidir), !.
 acao(decidir) :-	energia(V), V =< 50, ( posicao(Z, W), mapa_agente((Z, W), certeza(power_up)), acao(pegar_objeto), acao(decidir) ; (mapa_agente((_, _), certeza(power_up)), findall(_,retract(proximo_passo(_,_)),_), findall(_, encontrar_mais_proximo(certeza(power_up)) ,_ ) , !) ).
 acao(decidir) :-	( mapa_agente((_,_), duvida(nada)), findall(_,retract(proximo_passo(_,_)),_), findall(_, encontrar_mais_proximo(duvida(nada)) ,_ )  ), !.
@@ -119,7 +119,7 @@ adjacente_a((X, Y), Objeto) :-	Z is X, W is Y - 1, mapa_agente((Z, W), certeza(O
 
 transcore_eventos() :-	posicao(X, Y), mapa_real((X, Y), Objeto), Objeto = buraco, adiciona_a_score(-1000), write('Agente Morreu caindo em um buraco, mas que fim tragico').
 transcore_eventos() :-	posicao(X, Y), mapa_real((X, Y), Objeto), Objeto = inimigo(D, _), findall(_,tomar_dano(D),_).
-transcore_eventos() :-	posicao(X, Y), mapa_real((X, Y), Objeto), Objeto = teleporte, tamanho_mapa(Tx, Ty), Z is (random(Tx - 1) + 1), W is (random(Tx - 1) + 1), retract(posicao(_,_)), assert(posicao(Z, W)), findall(_,transcore_eventos(),_).
+transcore_eventos() :-	posicao(X, Y), mapa_real((X, Y), Objeto), Objeto = teleporte, tamanho_mapa(Tx, Ty), Z is (random(Tx - 1) + 1), W is (random(Ty - 1) + 1), retract(posicao(_,_)), assert(posicao(Z, W)), findall(_,transcore_eventos(),_).
 transcore_eventos() :-	posicao(X, Y), mapa_real((X, Y), _).
 
 simula_tiro() :- agente_olhando_para(X, Y), mapa_real((X, Y), inimigo(_, _)), dar_dano_inimigo(X, Y).
