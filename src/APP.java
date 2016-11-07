@@ -9,6 +9,7 @@ import dataTypes.IVector2D;
 import debug.DebugMap;
 import prolog.AStar;
 import prolog.AStarPath;
+import random_map_generator.Generator;
 import user_interface.GUI_APPWindow;
 import user_interface.Splash;
 
@@ -16,6 +17,15 @@ public class APP extends JFrame {
 
 	public static void main(String[] args) throws InterruptedException {
 		System.out.println("Programa iniciado");
+		
+		/*Generator.numero_buracos = 8;
+		Generator.dimensao_x = 12;
+		Generator.dimensao_y = 12;
+		Generator.numero_inimigos = 4;
+		Generator.numero_ouros = 3;
+		Generator.numero_powerup = 3;
+		Generator.numero_teleportes = 3;
+		Generator.GerarMapa();*/
 		
 		// Splash Screen
 		Splash.start();
