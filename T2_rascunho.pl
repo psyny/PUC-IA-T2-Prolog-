@@ -33,10 +33,10 @@ instanciar_tamanho_mapa(X, Y) :-	assert(tamanho_mapa(X, Y)).
 
 adicionar_ao_mapa((X, Y), Objeto) :- assert(mapa_real( (X, Y) , Objeto)).
 
-acao(mover_para_frente) :- 	orientacao(direita), posicao(X, Y), Z is X + 1, posicao_pertence_mapa(Z, Y), retract(posicao(X, Y)), assert(posicao(Z, Y)), ( mapa_real((Z, Y), Objeto), findall(_,assert_certeza((Z, Y), Objeto),_); findall(_,assert_certeza((Z, Y), nada),_) ) , findall(_,observa(Z, Y), _), findall(_,atualiza_duvidas( ),_), adiciona_a_score(-1), findall(_, trancore_eventos(), _), ! .
-acao(mover_para_frente) :-	orientacao(esquerda), posicao(X, Y), Z is X - 1, posicao_pertence_mapa(Z, Y), retract(posicao(X, Y)), assert(posicao(Z, Y)), ( mapa_real((Z, Y), Objeto), findall(_,assert_certeza((Z, Y), Objeto),_); findall(_,assert_certeza((Z, Y), nada),_) ) , findall(_,observa(Z, Y), _), findall(_,atualiza_duvidas( ),_), adiciona_a_score(-1), findall(_, trancore_eventos(), _), ! .
-acao(mover_para_frente) :-	orientacao(cima), posicao(X, Y), Z is Y + 1, posicao_pertence_mapa(X, Z), retract(posicao(X, Y)), assert(posicao(X, Z)), ( mapa_real((X, Z), Objeto), findall(_,assert_certeza((X, Z), Objeto),_) ; findall(_,assert_certeza((X, Z), nada),_) ) , findall(_,observa(X, Z),_), findall(_,atualiza_duvidas( ),_), adiciona_a_score(-1), findall(_, trancore_eventos(), _), ! .
-acao(mover_para_frente) :-	orientacao(baixo), posicao(X, Y), Z is Y - 1, posicao_pertence_mapa(X, Z), retract(posicao(X, Y)), assert(posicao(X, Z)), ( mapa_real((X, Z), Objeto), findall(_,assert_certeza((X, Z), Objeto),_); findall(_,assert_certeza((X, Z), nada),_) ) , findall(_,observa(X, Z),_), findall(_,atualiza_duvidas( ),_), adiciona_a_score(-1), findall(_, trancore_eventos(), _), ! .
+acao(mover_para_frente) :- 	orientacao(direita), posicao(X, Y), Z is X + 1, posicao_pertence_mapa(Z, Y), retract(posicao(X, Y)), assert(posicao(Z, Y)), ( mapa_real((Z, Y), Objeto), findall(_,assert_certeza((Z, Y), Objeto),_); findall(_,assert_certeza((Z, Y), nada),_) ) , findall(_,observa(Z, Y), _), findall(_,atualiza_duvidas(),_), adiciona_a_score(-1), findall(_, transcore_eventos(), _), ! .
+acao(mover_para_frente) :-	orientacao(esquerda), posicao(X, Y), Z is X - 1, posicao_pertence_mapa(Z, Y), retract(posicao(X, Y)), assert(posicao(Z, Y)), ( mapa_real((Z, Y), Objeto), findall(_,assert_certeza((Z, Y), Objeto),_); findall(_,assert_certeza((Z, Y), nada),_) ) , findall(_,observa(Z, Y), _), findall(_,atualiza_duvidas(),_), adiciona_a_score(-1), findall(_, transcore_eventos(), _), ! .
+acao(mover_para_frente) :-	orientacao(cima), posicao(X, Y), Z is Y + 1, posicao_pertence_mapa(X, Z), retract(posicao(X, Y)), assert(posicao(X, Z)), ( mapa_real((X, Z), Objeto), findall(_,assert_certeza((X, Z), Objeto),_) ; findall(_,assert_certeza((X, Z), nada),_) ) , findall(_,observa(X, Z),_), findall(_,atualiza_duvidas(),_), adiciona_a_score(-1), findall(_, transcore_eventos(), _), ! .
+acao(mover_para_frente) :-	orientacao(baixo), posicao(X, Y), Z is Y - 1, posicao_pertence_mapa(X, Z), retract(posicao(X, Y)), assert(posicao(X, Z)), ( mapa_real((X, Z), Objeto), findall(_,assert_certeza((X, Z), Objeto),_); findall(_,assert_certeza((X, Z), nada),_) ) , findall(_,observa(X, Z),_), findall(_,atualiza_duvidas(),_), adiciona_a_score(-1), findall(_, transcore_eventos(), _), ! .
 
 acao(virar_a_direita) :- orientacao(cima), retract(orientacao(cima)), assert(orientacao(direita)), adiciona_a_score(-1), !.
 acao(virar_a_direita) :- orientacao(esquerda), retract(orientacao(esquerda)), assert(orientacao(cima)), adiciona_a_score(-1), !.
@@ -117,13 +117,14 @@ adjacente_a((X, Y), Objeto) :-	Z is X - 1, W is Y, mapa_agente((Z, W), certeza(O
 adjacente_a((X, Y), Objeto) :-	Z is X, W is Y + 1, mapa_agente((Z, W), certeza(Objeto)) , ! .
 adjacente_a((X, Y), Objeto) :-	Z is X, W is Y - 1, mapa_agente((Z, W), certeza(Objeto)) , ! .
 
-trancore_eventos() :-	posicao(X, Y), mapa_real((X, Y), Objeto), Objeto = buraco, adiciona_a_score(-1000), write('Agente Morreu caindo em um buraco, mas que fim tragico').
-trancore_eventos() :-	posicao(X, Y), mapa_real((X, Y), Objeto), Objeto = inimigo(D, _), findall(_,tomar_dano(D),_).
-trancore_eventos() :-	posicao(X, Y), mapa_real((X, Y), _).
+transcore_eventos() :-	posicao(X, Y), mapa_real((X, Y), Objeto), Objeto = buraco, adiciona_a_score(-1000), write('Agente Morreu caindo em um buraco, mas que fim tragico').
+transcore_eventos() :-	posicao(X, Y), mapa_real((X, Y), Objeto), Objeto = inimigo(D, _), findall(_,tomar_dano(D),_).
+transcore_eventos() :-	posicao(X, Y), mapa_real((X, Y), Objeto), Objeto = teleporte, tamanho_mapa(Tx, Ty), Z is (random(Tx - 1) + 1), W is (random(Tx - 1) + 1), retract(posicao(_,_)), assert(posicao(Z, W)), findall(_,transcore_eventos(),_).
+transcore_eventos() :-	posicao(X, Y), mapa_real((X, Y), _).
 
 simula_tiro() :- agente_olhando_para(X, Y), mapa_real((X, Y), inimigo(_, _)), dar_dano_inimigo(X, Y).
 
-dar_dano_inimigo(X, Y) :-	mapa_real((X, Y), inimigo(D, V)), W is V - 20, retract(mapa_real((X, Y), inimigo(_, _))), ( ( W > 0, assert(mapa_real((X, Y), inimigo(D, W))) ) ; findall(_,assert_certeza( (X, Y), nada),_) ), ! .
+dar_dano_inimigo(X, Y) :-	mapa_real((X, Y), inimigo(D, V)), Dano is (random(30) + 20), W is V - Dano, retract(mapa_real((X, Y), inimigo(_, _))), ( ( W > 0, assert(mapa_real((X, Y), inimigo(D, W))) ) ; findall(_,assert_certeza( (X, Y), nada),_) ), ! .
 
 agente_olhando_para(X, Y) :-	orientacao(cima), posicao(Z, W), X is Z, Y is W + 1, (posicao_pertence_mapa(X, Y) ; write('Parede')), !.
 agente_olhando_para(X, Y) :-	orientacao(baixo), posicao(Z, W), X is Z, Y is W - 1, (posicao_pertence_mapa(X, Y) ; write('Parede')), !.
