@@ -207,8 +207,6 @@ public class Actor extends JLayeredPane implements Animable {
 			
 			if( this.destroyEffect != null ) {
 				Toolkit.getDefaultToolkit().sync();
-				IVector2D center = this.getProjectionCenter();
-				//this.stage.createEffectInPosition( this.destroyEffect , 20 , center.x , center.y );	
 				Singletons.actorScene.createEffectInRealPosition( this.destroyEffect , 20, this.realPosition.x , this.realPosition.y );
 				this.destroyCounter = 0;
 			}

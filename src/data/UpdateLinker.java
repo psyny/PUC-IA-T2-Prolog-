@@ -1,5 +1,6 @@
 package data;
 
+import java.awt.Toolkit;
 import java.util.ArrayList;
 
 import dataTypes.*;
@@ -24,6 +25,7 @@ public class UpdateLinker implements Runnable {
 	
 	
 	 private void threadCycle( long passed ) {
+		 Toolkit.getDefaultToolkit().sync();
 		 // Look for discovered areas
 		 if( Singletons.gameGrid != null ) {
 			 for( ArrayList<Cell> row : Singletons.gameGrid.cells ) {
