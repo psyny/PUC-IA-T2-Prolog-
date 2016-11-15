@@ -22,7 +22,7 @@ public class Splash extends JFrame {
 	public Splash() {
     	setSize( size.x , size.y );
 
-    	setTitle("Mad Prolog Splash");
+    	setTitle("Log Max - Splash");
     	//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     	setLocationRelativeTo(null);
     	setUndecorated(true);
@@ -47,6 +47,10 @@ public class Splash extends JFrame {
                 Toolkit.getDefaultToolkit().sync();
             }
         } );
+        
+    	
+    	// Music Player
+    	MusicPlayer.init();
         
         try {
 			Thread.sleep(3000);

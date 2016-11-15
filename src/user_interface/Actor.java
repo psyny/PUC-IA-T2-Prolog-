@@ -2,6 +2,7 @@ package user_interface;
 
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Toolkit;
 import java.util.ArrayList;
 
 import javax.swing.JLayeredPane;
@@ -28,7 +29,18 @@ public class Actor extends JLayeredPane implements Animable {
 	
 	public Container parent = null;
 	
+	public GameScene stage = null;
+	
 	private ArrayList<innerSprite> innerSprites;
+	
+	public boolean 		destroing = false;
+	public EffectType 	destroyEffect = null;
+	public long			destroyDelay = 0;
+	private long		destroyCounter = 0;
+	
+	public double moveSpeed = 0;
+	public double moveDirection = 0;
+	
 
 	public Actor( int sizeX , int sizeY ) {
 		this.init();
@@ -70,25 +82,45 @@ public class Actor extends JLayeredPane implements Animable {
 	}
 	
 	public void addSprite( Sprite sprite , IVector2D relativePosition , int layer ) {
-		IVector2D newSize = sprite.getDimension();
-		if( newSize.x > this.projectionSize.x ) {
-			this.projectionSize.x = newSize.x;
+		IVector2D spriteSize = sprite.getDimension();
+		if( spriteSize.x > this.projectionSize.x ) {
+			this.projectionSize.x = spriteSize.x;
 			this.updateLocation();
 		}
-		if( newSize.y > this.projectionSize.y ) {
-			this.projectionSize.y = newSize.y;
+		if( spriteSize.y > this.projectionSize.y ) {
+			this.projectionSize.y = spriteSize.y;
 			this.updateLocation();
 		}
 		
 		innerSprite newInnerSprite = new innerSprite( relativePosition , sprite );
 		this.innerSprites.add( newInnerSprite );
 		sprite.insertInto( this );
-		sprite.setLocation( ( this.projectionSize.x / 2 ) + relativePosition.x - ( sprite.getDimension().x / 2 ) , ( this.projectionSize.y / 2 ) + relativePosition.y - ( sprite.getDimension().y / 2 ) );
 		this.setLayer( sprite , layer);
+		
+		IVector2D spritePosition =  new IVector2D( 0 , 0 );
+		spritePosition.x = ( this.projectionSize.x / 2 ) + relativePosition.x - ( sprite.getDimension().x / 2 ) ;
+		spritePosition.y = ( this.projectionSize.y / 2 ) + relativePosition.y - ( sprite.getDimension().y / 2 ) ;
+		
+		sprite.setBounds(spritePosition.x, spritePosition.y, spriteSize.x, spriteSize.y);
+		
+		//sprite.setLocation( spritePosition.x , spritePosition.y  );
 	}
 	
 	@Override
-	public void passTime(long time) {
+	public void passTime(long time) {	
+		// Position
+		this.setRealPosition( this.realPosition.x + ( this.moveSpeed * Math.cos( this.moveDirection ) ) , this.realPosition.y + ( this.moveSpeed * Math.sin( this.moveDirection ) ) );
+		
+		// Destroy
+		if( this.destroing == true ) {
+			this.destroyCounter += time;
+			if( this.destroyCounter >= this.destroyDelay  ) {
+				this.setVisible(false);
+				Toolkit.getDefaultToolkit().sync();
+				Singletons.actorScene.remove(this);
+			}
+		}
+		
 		for( innerSprite iSpr : this.innerSprites ) {
     		if (iSpr.sprite instanceof Animable ) {
     			((Animable) iSpr.sprite).passTime( time );
@@ -99,6 +131,7 @@ public class Actor extends JLayeredPane implements Animable {
 		if( this.parent != null ) {
 			if( this.getComponents().length == 0 ) {
 				this.setVisible(false);
+				Toolkit.getDefaultToolkit().sync();
 				this.parent.remove(this);
 			}
 		}
@@ -109,6 +142,15 @@ public class Actor extends JLayeredPane implements Animable {
 		this.realPosition.y = y;
 		
 		this.updateLocation();
+	}
+	
+	public void setLocation( int x , int y ) {
+		this.setSize( this.projectionSize.x , this.projectionSize.y );		
+		
+		this.projectionPosition.x = x - ( this.projectionSize.x / 2 );
+		this.projectionPosition.y = y - ( this.projectionSize.y / 2 );
+		
+		super.setLocation( (int)this.projectionPosition.x , (int)this.projectionPosition.y );
 	}
 	
 	private void updateLocation() {
@@ -145,5 +187,31 @@ public class Actor extends JLayeredPane implements Animable {
 		projectionCenter.y += ( this.projectionSize.y / 2 );
 		
 		return projectionCenter;
+	}
+	
+	public void updateStatus( Cell cell ) {
+		if( ( cell.discovered == true || Singletons.fogUndiscovery == false ) && ( cell.destroyed == false ) ) {
+			this.setVisible(true);
+		} else {
+			if( cell.destroyed == true ) {
+				this.destroyFx();
+			} else {
+				this.setVisible(false);
+			}
+		}
+	}
+	
+	public void destroyFx( ) {
+		if( this.destroing == false ) {
+			this.destroing = true;
+			
+			if( this.destroyEffect != null ) {
+				Toolkit.getDefaultToolkit().sync();
+				IVector2D center = this.getProjectionCenter();
+				//this.stage.createEffectInPosition( this.destroyEffect , 20 , center.x , center.y );	
+				Singletons.actorScene.createEffectInRealPosition( this.destroyEffect , 20, this.realPosition.x , this.realPosition.y );
+				this.destroyCounter = 0;
+			}
+		}
 	}
 }

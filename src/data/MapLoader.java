@@ -36,6 +36,7 @@ public class MapLoader {
 	    // Load Varibles
 	    String line;
 	    boolean breakFlag = false;
+	    int waterQtd = 0;
 	    
 	    // Load Data
     	while( file.hasNextLine() ) {
@@ -88,6 +89,7 @@ public class MapLoader {
 	    			
 	    		case 'O':
 	    			newCell.type = CellType.WATER;
+	    			waterQtd++;
 	    			break;
 	    			
 	    		case 'U':
@@ -121,5 +123,6 @@ public class MapLoader {
 	    
 	    // Create the Grid Singleton
 	    Singletons.gameGrid = new Grid( cells );
+	    Singletons.gameGrid.waterQtd = waterQtd;
 	}
 }

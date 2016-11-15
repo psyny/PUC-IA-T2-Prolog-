@@ -74,6 +74,8 @@ public class AnimatedSprite extends Sprite implements Animable {
 	private double			speedScale;
 	private int 			frameDirection;
 	
+	public AnimatedSprite	group = null;
+	
 	public AnimatedSprite( String spriteData ) {
 		this.spriteData = spriteData;	
 		super.init();
@@ -213,52 +215,58 @@ public class AnimatedSprite extends Sprite implements Animable {
 			return;
 		}
 		
-		this.animState.currentFrameTime += time;
-		
-		boolean finishedLoop = false;
-		
-		while( ( this.animState.currentFrameTime * this.speedScale ) > this.animState.currentAnimation.defaultSpeed ) {
-			this.animState.currentFrameTime = this.animState.currentAnimation.defaultSpeed - this.animState.currentFrameTime;
+		// If is in a group, use group stats
+		if( this.group != null ) {
+			this.animState.currentAnimationFrame = this.group.animState.currentAnimationFrame;
+		} else {
+		// Else... Calculate own animation
+			this.animState.currentFrameTime += time;
 			
-			int lastFrame = this.animState.currentAnimationFrame;
-			this.animState.currentAnimationFrame += frameDirection;			
-			if( this.animState.currentAnimationFrame > this.animState.currentAnimation.frames ) {
-				if( this.loopType == LoopType.ZIGZAG ) {
-					this.animState.currentAnimationFrame = this.animState.currentAnimation.frames;
-					this.frameDirection *= -1;
-				} else {
-					this.animState.currentAnimationFrame = 1;	
-				}
-				finishedLoop = true;
-			} else if ( this.animState.currentAnimationFrame < 1 ) {
-				if( this.loopType == LoopType.ZIGZAG ) {
-					this.animState.currentAnimationFrame = 1;
-					this.frameDirection *= -1;
-				} else {
-					this.animState.currentAnimationFrame = this.animState.currentAnimation.frames;	
-				}
-				finishedLoop = true;
-			}
+			boolean finishedLoop = false;
 			
-			// Loop Counting		
-			if( ( this.loopType == LoopType.END_STOP ||  this.loopType == LoopType.END_DIE ) && finishedLoop == true ) {
-				this.animState.currentLoop += 1;
+			while( ( this.animState.currentFrameTime * this.speedScale ) > this.animState.currentAnimation.defaultSpeed ) {
+				this.animState.currentFrameTime = this.animState.currentAnimation.defaultSpeed - this.animState.currentFrameTime;
 				
-				if( this.animState.currentLoop >= this.loopLimit ) {
-					this.animState.paused = true;
-					this.animState.currentAnimationFrame = lastFrame;
+				int lastFrame = this.animState.currentAnimationFrame;
+				this.animState.currentAnimationFrame += frameDirection;			
+				if( this.animState.currentAnimationFrame > this.animState.currentAnimation.frames ) {
+					if( this.loopType == LoopType.ZIGZAG ) {
+						this.animState.currentAnimationFrame = this.animState.currentAnimation.frames;
+						this.frameDirection *= -1;
+					} else {
+						this.animState.currentAnimationFrame = 1;	
+					}
+					finishedLoop = true;
+				} else if ( this.animState.currentAnimationFrame < 1 ) {
+					if( this.loopType == LoopType.ZIGZAG ) {
+						this.animState.currentAnimationFrame = 1;
+						this.frameDirection *= -1;
+					} else {
+						this.animState.currentAnimationFrame = this.animState.currentAnimation.frames;	
+					}
+					finishedLoop = true;
+				}
+				
+				// Loop Counting		
+				if( ( this.loopType == LoopType.END_STOP ||  this.loopType == LoopType.END_DIE ) && finishedLoop == true ) {
+					this.animState.currentLoop += 1;
 					
-					if( this.loopType == LoopType.END_DIE ) {
-						this.delete();
-						return;
+					if( this.animState.currentLoop >= this.loopLimit ) {
+						this.animState.paused = true;
+						this.animState.currentAnimationFrame = lastFrame;
+						
+						if( this.loopType == LoopType.END_DIE ) {
+							this.delete();
+							return;
+						}
 					}
 				}
 			}
-
-			// State adjustment
-			this.animState.updateRowCol();			
-			this.adjustLastFrame();
 		}
+
+		// State adjustment
+		this.animState.updateRowCol();			
+		this.adjustLastFrame();
 	}
 	
 	private void adjustLastFrame() {
@@ -347,6 +355,10 @@ public class AnimatedSprite extends Sprite implements Animable {
 		this.loopType 				= loopType;
 		this.animState.currentLoop 	= 0;
 		this.animState.paused 		= false;
+		
+		if( this.group != null ) {
+			this.animState.currentAnimationFrame = this.group.animState.currentAnimationFrame;
+		}
 	}
 		
 	

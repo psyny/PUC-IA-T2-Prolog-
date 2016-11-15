@@ -9,6 +9,8 @@ import dataTypes.IVector2D;
 public class ActorEffect extends Actor {
 	private AnimatedSprite sprite = null;
 	
+	private long life = 0;
+	
 	public ActorEffect(int sizeX, int sizeY, EffectType type) {
 		super(sizeX, sizeY);
 		
@@ -21,6 +23,26 @@ public class ActorEffect extends Actor {
 				offset.x = -16;
 				offset.y = -110;
 				break;
+				
+			case WATERSPLASH:
+				spriteName = "waterSplash.txt";
+				offset.x = 0;
+				offset.y = 0;
+				break;
+
+			case POWERUP:
+				spriteName = "fadingFlame.txt";
+				offset.x = 0;
+				offset.y = 0;
+				break;
+				
+			case DIRT:
+				spriteName = "smokeDirt.txt";
+				offset.x = 0;
+				offset.y = 0;
+				break;				
+				
+				
 		}
 		
 		
@@ -29,4 +51,16 @@ public class ActorEffect extends Actor {
 		
 		this.sprite.playAnimation(1, 1, LoopType.END_DIE );
 	}	
+	
+	@Override
+	public void passTime(long time) {
+		this.life += time;
+		
+		if( this.life > 10000 ) {
+			System.out.println("DEBUG: ANCIAO!");
+		}
+		
+		super.passTime(time);
+	}
+	
 }

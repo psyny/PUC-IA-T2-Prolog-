@@ -15,6 +15,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 import javax.swing.border.LineBorder;
 
+import data.Singletons;
 import dataTypes.*;
 
 public class Camera extends JScrollPane implements Runnable , MouseMotionListener {
@@ -28,7 +29,16 @@ public class Camera extends JScrollPane implements Runnable , MouseMotionListene
 	private double			maxMoveSpeed = 50;
 	private double			minMoveSpeed = 0.5;
 	
+	private long 			sweepDelay = 10;
+	public boolean			isSweeping = false;
+	private IVector2D		sweepStep = new IVector2D( 300 , 300 );
+	private IVector2D		sweepPosition = new IVector2D( 0 , 0 );
+	private IVector2D		sweepLimit = new IVector2D( 100 , 100 );
+	
 	private boolean			fixedTarget = true;
+	
+	private ArrayList<Animable>	animableList = new ArrayList<Animable>();
+	
 	
 	
 	public Camera( Component viewPort , int x , int y ) {
@@ -61,7 +71,22 @@ public class Camera extends JScrollPane implements Runnable , MouseMotionListene
     		}
     	}
     	
-    	if( this.fixedTarget == true ) {
+    	for( Animable anim : this.animableList ) {
+    		anim.passTime( passed );
+    	}
+    	
+    	if( this.isSweeping == true ) {
+    		if( this.sweepStep() == true ) {
+	    		this.cameraPosition.x = this.sweepPosition.x;
+	    		this.cameraPosition.y = this.sweepPosition.y;	    		
+    		} else {
+    			IVector2D rPos =  Singletons.hero.getProjectionCenter();
+    			
+	    		this.cameraPosition.x = rPos.x;
+	    		this.cameraPosition.y = rPos.y;
+    		}
+    		this.getViewport().setViewPosition( new Point( (int)this.cameraPosition.x , (int)this.cameraPosition.y ));
+    	} else if( this.fixedTarget == true ) {
 	    	// Set Position
 	    	DVector2D offset = new DVector2D( this.getSize().getWidth() / 2 , this.getSize().getHeight() / 2 );
 	    	DVector2D effectiveTarget = new DVector2D( this.cameraTarget.x - offset.x , this.cameraTarget.y - offset.y );
@@ -83,22 +108,34 @@ public class Camera extends JScrollPane implements Runnable , MouseMotionListene
 	    	DVector2D distance = DVector2D.getDistanceVector( this.cameraPosition , effectiveTarget );
 	    	if( distance.getModulus() > 1 ) {
 	    		DVector2D moveSpeed = new DVector2D( distance.x / 50 , distance.y / 50 );
+	    		distance.normalize();
+	    		int xDir = 1;
+	    		int yDir = 1;
+	    		
 	    		
 	    		if( Math.abs( this.cameraPosition.x - effectiveTarget.x ) >= 1 ) {
-		    		if( moveSpeed.x < this.minMoveSpeed ) {
-		    			moveSpeed.x = this.minMoveSpeed;
-		    		} else if ( moveSpeed.x > this.maxMoveSpeed ) {
-		    			moveSpeed.x = this.maxMoveSpeed;
+	    			if( moveSpeed.x < 0 ) {
+	    				xDir = -1;
+	    			}
+	    			
+		    		if( Math.abs(moveSpeed.x) < this.minMoveSpeed ) {
+		    			moveSpeed.x = this.minMoveSpeed * xDir;
+		    		} else if ( Math.abs(moveSpeed.x) > this.maxMoveSpeed ) {
+		    			moveSpeed.x = this.maxMoveSpeed * xDir;
 		    		}
 	    		} else {
 	    			moveSpeed.x = 0;
 	    		}	
 	    		
 	    		if( Math.abs( this.cameraPosition.y - effectiveTarget.y ) >= 1 ) {
-		    		if( moveSpeed.y < this.minMoveSpeed ) {
-		    			moveSpeed.y = this.minMoveSpeed;
-		    		} else if ( moveSpeed.y > this.maxMoveSpeed ) {
-		    			moveSpeed.y = this.maxMoveSpeed;
+	    			if( moveSpeed.y < 0 ) {
+	    				yDir = -1;
+	    			}
+	    			
+		    		if( Math.abs(moveSpeed.y) < this.minMoveSpeed ) {
+		    			moveSpeed.y = this.minMoveSpeed * yDir;
+		    		} else if ( Math.abs(moveSpeed.y) > this.maxMoveSpeed ) {
+		    			moveSpeed.y = this.maxMoveSpeed * yDir;
 		    		}
 	    		} else {
 	    			moveSpeed.y = 0;
@@ -106,6 +143,9 @@ public class Camera extends JScrollPane implements Runnable , MouseMotionListene
 	
 	    		this.cameraPosition.x += moveSpeed.x ;
 	    		this.cameraPosition.y +=  moveSpeed.y ;
+	    	} else {
+	    		this.cameraPosition.x = effectiveTarget.x;
+	    		this.cameraPosition.y = effectiveTarget.y;
 	    	}
     		
     		// Finally Set   
@@ -147,19 +187,32 @@ public class Camera extends JScrollPane implements Runnable , MouseMotionListene
 	public void setTarget( int x , int y ) {
 		this.cameraTarget.x = x;
 		this.cameraTarget.y = y;
-		
-        /*
-        this.getViewport().invalidate();
-        this.getViewport().revalidate();
-        this.getViewport().repaint();
-        this.invalidate();
-        this.revalidate();
-        this.repaint();
-        */
 	}
 	
 	public void setIsFixedOnTarget( boolean mode ) {
 		this.fixedTarget = mode;
+	}
+	
+	public void setPositionCenteredOn( int x , int y ) {
+    	// Set Position
+    	DVector2D offset = new DVector2D( this.getSize().getWidth() / 2 , this.getSize().getHeight() / 2 );
+    	DVector2D effectivePosition = new DVector2D( x - offset.x , y - offset.y );
+    	
+		// Boundaries
+		if( effectivePosition.x < 0 ) {
+			effectivePosition.x = 0;
+		} else if ( effectivePosition.x > 100000 ) {
+			effectivePosition.x = 100000;
+		}
+		
+		if( effectivePosition.y < 0 ) {
+			effectivePosition.y = 0;
+		} else if ( effectivePosition.y > 100000 ) {
+			effectivePosition.y = 100000;
+		} 
+		
+		this.cameraPosition.x = effectivePosition.x;
+		this.cameraPosition.y = effectivePosition.y;
 	}
 
 	@Override
@@ -176,5 +229,37 @@ public class Camera extends JScrollPane implements Runnable , MouseMotionListene
 		// TODO Auto-generated method stub
 		
 	}
-
+	
+	public void doSweep( IVector2D limits , IVector2D cameraSize ) {
+		this.sweepLimit = limits;
+		this.sweepLimit.x -= cameraSize.x;
+		this.sweepLimit.y  = ( this.sweepLimit.y / 2 ) - cameraSize.y;
+		
+		this.isSweeping = true;
+		this.sweepPosition = new IVector2D(0,0);
+		
+		this.sweepStep.x = cameraSize.x / 4;
+		this.sweepStep.y = cameraSize.y / 4;
+	}
+	
+	private boolean sweepStep() {
+		this.sweepPosition.x += this.sweepStep.x;
+		
+		if( this.sweepPosition.x > this.sweepLimit.x ) {
+			this.sweepPosition.x = 0;
+			this.sweepPosition.y += this.sweepStep.y;
+			
+			if( this.sweepPosition.y > this.sweepLimit.y ) {
+				this.isSweeping = false;
+				return false;
+			}
+		}
+		
+		return true;
+	}
+	
+	public void addToAnimableList( Animable anim ) {
+		this.animableList.add( anim );
+	}
+ 
 }

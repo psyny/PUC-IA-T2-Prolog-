@@ -6,16 +6,34 @@ import data.Singletons;
 import dataTypes.*;
 
 public class AStar {
+	public static boolean debugMode = false;
+	
 	public static AStarPath getPath( IVector2D Destination ) {
+		return AStar.getPath( new IVector2D( Singletons.heroPosition.x , Singletons.heroPosition.y ) , Singletons.heroDirection , Destination );
+	}
+	
+	public static AStarPath getPath( IVector2D Origin , int OriginDirection ,  IVector2D Destination ) {
+		if( AStar.debugMode == true ) { 
+			System.out.println( "AStar Started: Origin: " + Origin.x + " , " + Origin.y 
+					+ " | Destiny: " + Destination.x + " , " + Destination.y 
+					+ " | Direction: " + OriginDirection
+					);
+		}
 		AStarPath aspath = new AStarPath();
+		aspath.origin = new IVector2D( Origin.x , Origin.y );
+		aspath.originDirection = OriginDirection;
+		
 		Grid grid = Singletons.gameGrid;
-		Cell tCell = grid.getCell( Singletons.heroPosition.x , Singletons.heroPosition.y );
+		grid.resetAStarData();
+		
+		Cell oCell = grid.getCell( Origin.x , Origin.y );
+		Cell tCell = oCell;
 		Cell dCell = grid.getCell( Destination.x , Destination.y );
 		Cell cCell = null;
 		
 		// Starting Cell Options
 		tCell.ASData.predecessor 		= null;
-		tCell.ASData.direction 			= Singletons.heroDirection;
+		tCell.ASData.direction 			= OriginDirection;
 		tCell.ASData.costToEnter 		= 0;
 		tCell.ASData.accumulatedCost 	= 0;
 		tCell.ASData.type				= 1;
@@ -23,6 +41,9 @@ public class AStar {
 		// Build Path
 		ArrayList<Cell> frontier = new ArrayList<Cell>();
 		while( tCell != dCell ) {
+			if( AStar.debugMode == true ) { 
+				System.out.println( "AStar Position: Origin: " + tCell.position.x + " , " + tCell.position.y + " | Direction: " + tCell.ASData.direction );
+			}
 			AStar.addFrontier( frontier , tCell , dCell );
 			if( frontier.size() < 1 ) break;
 			tCell = AStar.getBestCandidate( frontier );
@@ -34,7 +55,14 @@ public class AStar {
 		}
 		
 		// Build Path List
+		aspath.destiny = new IVector2D( tCell.position.x , tCell.position.y );
+		aspath.destinyDirection = tCell.ASData.direction;
+		aspath.clusterCellsCleared = 0;
 		while( tCell != null ) {
+			if( tCell.cluster == oCell.cluster || tCell.cluster == dCell.cluster ) {
+				aspath.clusterCellsCleared++;
+			}
+			
 			aspath.cellList.add( 0 , tCell );
 			tCell = tCell.ASData.predecessor;
 		}
@@ -45,8 +73,11 @@ public class AStar {
 			cCell = aspath.cellList.get(i+1);
 			tCell = cCell.ASData.predecessor;
 			
+			aspath.cost++;
+			
 			for( int j = 0 ; j < AStar.getTurnCost( tCell.ASData.direction , cCell.ASData.direction ) ; j++ ) {
 				aspath.commandList.add( Commands.TURN );
+				aspath.cost++;
 			}
 			aspath.commandList.add( Commands.MOVE );
 		}
@@ -95,7 +126,7 @@ public class AStar {
 	private static void addCellToList( ArrayList<Cell> list , Cell cell , Cell predecessor , Cell finalDestination , int cellRelativeDirection ) {
 		// Cells to avoid:
 		if( cell == null || cell.ASData.type != 0 ) return;
-		if( cell.discovered == false && cell != finalDestination ) return;
+ 		if( cell.discovered == false && cell.frontier == false && cell != finalDestination ) return;
 		if( cell.destroyed == false ) {
 			switch( cell.type ) {
 				case BOSS:
@@ -108,28 +139,33 @@ public class AStar {
 		
 
 		// Calculate new cell data
-		int tCost = AStar.getTurnCost( Singletons.heroDirection , cellRelativeDirection );
-		int tHeu = AStar.getManhattan( cell.position , finalDestination.position );
+		int tCost = AStar.getTurnCost( predecessor.ASData.direction , cellRelativeDirection );
+		int goalEstimative = AStar.getManhattan( cell.position , finalDestination.position );
 		
-		// Penalize turns
-		tCost = tCost * 4;
-
 		// Cell new Specs
 		cell.ASData.predecessor = predecessor;
-		cell.ASData.costToEnter = tCost;
+		cell.ASData.costToEnter = tCost + 1;
 		cell.ASData.accumulatedCost = predecessor.ASData.accumulatedCost + cell.ASData.costToEnter;
-		cell.ASData.heuristicFinalCost = tHeu + cell.ASData.accumulatedCost;
+		cell.ASData.heuristicFinalCost = cell.ASData.accumulatedCost + goalEstimative + ( tCost * 0 );
 		cell.ASData.type = 2;	
 		cell.ASData.direction = cellRelativeDirection;
-
+		
+		if( AStar.debugMode == true ) { 
+			System.out.println( "ASCell: " + cell.position.x + "," +  cell.position.y + " | " + cell.ASData.costToEnter + " , " + cell.ASData.heuristicFinalCost );
+		}
+		
 		list.add( cell );
 	}
 	
 	private static Cell getBestCandidate( ArrayList<Cell> list ) {
 		Cell best = list.get(0);
-		
+
 		for( Cell cell : list ) {
-			if( cell.ASData.heuristicFinalCost < best.ASData.heuristicFinalCost ) {
+			if( cell.ASData.heuristicFinalCost == best.ASData.heuristicFinalCost ) {
+				if( best.frontier == false  && cell.frontier == true ) {
+					best = cell;
+				}
+			} else if( cell.ASData.heuristicFinalCost < best.ASData.heuristicFinalCost ) {
 				best = cell;
 			}
 		}

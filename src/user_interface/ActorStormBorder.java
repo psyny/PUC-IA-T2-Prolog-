@@ -13,6 +13,7 @@ public class ActorStormBorder extends Actor {
 	public Cell				borderOf = null;
 	
 	private AnimatedSprite 	sprite;
+	private int direction;
 		
 	public ActorStormBorder(int sizeX, int sizeY , Cell borderOf , int direction ) {
 		super(sizeX, sizeY);
@@ -27,13 +28,14 @@ public class ActorStormBorder extends Actor {
 		this.sprite = this.getAnimatedSprite();
 		this.borderOf = borderOf;
 		
+		this.direction = direction;
 		this.sprite.playAnimation(direction);
 	}
 	
 	public void updateStatus( Cell cell ) {			
 		if( Singletons.fogUndiscovery == true ) {	
-			if( cell.discovered == true  ) {
-				if( this.borderOf.discovered == true ) {
+			if( cell.frontier == true  ) {
+				if( this.borderOf.frontier == true || this.borderOf.discovered == true ) {
 					if( this.isVisible() == true ) {
 						this.setVisible(false);
 					}
@@ -42,6 +44,26 @@ public class ActorStormBorder extends Actor {
 						this.setVisible(true);
 					}
 				}
+			} else if( cell.discovered == true  ) {
+					if( this.borderOf.frontier == true ) {
+						if( this.isVisible() == false ) {
+							this.setVisible(true);			
+						}
+						if( this.sprite.getCurrentAnimationID() != this.direction + 100 ) {
+							this.sprite.playAnimation( this.direction + 100 );
+						}
+					} else if ( this.borderOf.discovered == false ) {
+						if( this.isVisible() == false ) {
+							this.setVisible(true);
+						}
+						if( this.sprite.getCurrentAnimationID() != this.direction ) {
+							this.sprite.playAnimation( this.direction );
+						}
+					} else {
+						if( this.isVisible() == true ) {
+							this.setVisible(false);
+						}
+					}
 			} else {
 				if( this.isVisible() == true ) {
 					this.setVisible(false);

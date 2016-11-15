@@ -22,6 +22,8 @@ public class ActorFactory {
 			case GAS:
 				newActor = new Actor( 150 , 150 );
 				newActor.addSprite( "upgrade.txt" , new IVector2D( 0 , 0 ) , 0 );
+				newActor.destroyDelay = 100;
+				newActor.destroyEffect = EffectType.POWERUP;
 				break;
 			
 			case WATER:
@@ -42,7 +44,7 @@ public class ActorFactory {
 				break;
 				
 			case HERO:
-				newActor = new ActorHero( 240 , 240 );
+				newActor = new ActorHero( 150 , 150 );
 				break;
 				
 			case STORM:
@@ -85,13 +87,27 @@ public class ActorFactory {
 		return newActor;
 	}
 	
-	public static Actor fabricateEffect( EffectType type ) {
-		Actor newActor = null;
+	public static ActorEffect fabricateEffect( EffectType type ) {
+		ActorEffect newActor = null;
 		
 		switch( type ) {
 			case LIGHTNING:
 				newActor = new ActorEffect( 100 , 512 , type );
 				break;
+				
+			case WATERSPLASH:
+				newActor = new ActorEffect( 150 , 150 , type );
+				break;	
+				
+			case POWERUP:
+				newActor = new ActorEffect( 150 , 150 , type );
+				break;		
+				
+			case DIRT:
+				newActor = new ActorEffect( 130 , 130 , type );
+				newActor.moveDirection = Math.PI * ( 1.4 + ( Math.random() * 0.2 ) );
+				newActor.moveSpeed = 1 + ( Math.random() * 2 );
+				break;				
 		}
 		
 		return newActor;

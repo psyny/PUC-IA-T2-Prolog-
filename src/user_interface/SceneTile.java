@@ -41,17 +41,17 @@ public class SceneTile extends JLayeredPane {
 				IVector2D projection = IsoGrid.getProjection( IsoGrid.isoTileSize.x * x , IsoGrid.isoTileSize.y * y , false , false );
 
 				spr = new TileSetSprite( spriteFileName );
-				spr.setLocation( ( projection.x / subTiles ) + offset.x , ( projection.y / subTiles ) + offset.y );
-				spr.insertInto( this );	
-				
+				IVector2D sprSize = spr.getDimension();
+				IVector2D sprLocation = new IVector2D( ( projection.x / subTiles ) + offset.x , ( projection.y / subTiles ) + offset.y );
 				if( Math.random()*100 < 95 ) {
 					spr.setRandomTile(1);
 				} else {
 					spr.setRandomTile(2);
 				}
 				
+				spr.insertInto( this );	
 				this.setLayer( spr, x - y );
-				this.tiles.add( spr );
+				spr.setBounds( sprLocation.x  , sprLocation.y , sprSize.x , sprSize.y );
 			}
 		}
 		

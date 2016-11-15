@@ -22,14 +22,6 @@ public class ActorStorm extends Actor {
 	
 	public ActorStorm(int sizeX, int sizeY , int layer , JLayeredPane parent) {
 		super(sizeX, sizeY);
-		this.setLayerConfigs(layer, parent);
-	}
-	
-	public void setLayerConfigs( int layer , JLayeredPane parent) {
-		this.defaultLayer = layer;
-		this.parent = parent;
-		
-		parent.setLayer( this, layer);
 	}
 	
 	public void updateStatus( Cell cell ) {
@@ -45,6 +37,15 @@ public class ActorStorm extends Actor {
 				
 				if( cell.contentActor != null ) {
 					cell.contentActor.setVisible(true);
+				}
+			}
+		} else if ( cell.frontier == true ){
+			if( stormSpr.getCurrentAnimationID() != 15 ) {
+				stormSpr.playAnimation(15);			
+				//parent.setLayer( this, this.defaultLayer + 1 );
+				
+				if( cell.contentActor != null ) {
+					cell.contentActor.setVisible(false);
 				}
 			}
 		} else {

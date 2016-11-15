@@ -16,11 +16,12 @@ public class Cell {
 	
 	
 	// Apenas para Consulta
-	public IVector2D 			position = new IVector2D( 0 , 0 );
-	public CellType 			type = CellType.CLEAN;
+	public IVector2D 	position = new IVector2D( 0 , 0 );
+	public CellType 	type = CellType.CLEAN;
 	
 	// Atualizar com o ProLog
 	public boolean		discovered = false;
+	public boolean		frontier = false;
 	public boolean		destroyed = false;
 	public AStarData	ASData = new AStarData();
 	
@@ -31,7 +32,9 @@ public class Cell {
 	public ActorStorm	stormActor;
 	public Actor		contentActor;
 	public ActorGrid	visibleGrid;
-
+	
+	public double			clusterWeight;
+	public ArrayList<Cell>	cluster;
 	
 	// Dados do MAURICIO
 	
@@ -79,5 +82,15 @@ public class Cell {
 		} else {
 			return false;
 		}
+	}
+	
+	public void cleanASData() {
+		this.ASData = new AStarData();
+	}
+	
+	public int getManDistTo( Cell cellTo ) {
+		int dist;
+		dist = Math.abs( this.position.x - cellTo.position.x ) + Math.abs( this.position.y + cellTo.position.y );
+		return dist;
 	}
 }

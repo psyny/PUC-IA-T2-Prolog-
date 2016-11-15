@@ -5,12 +5,15 @@ import javax.swing.*;
 import animation.*;
 import data.Singletons;
 import data.UpdateLinker;
+import dataTypes.DVector2D;
 import dataTypes.IVector2D;
 import debug.DebugMap;
 import prolog.AStar;
 import prolog.AStarPath;
+import prolog.Prolog;
 import random_map_generator.Generator;
 import user_interface.GUI_APPWindow;
+import user_interface.IsoGrid;
 import user_interface.Splash;
 
 public class APP extends JFrame {
@@ -43,6 +46,8 @@ public class APP extends JFrame {
     	}
     	Splash.splash.dispatchEvent(new WindowEvent(Splash.splash, WindowEvent.WINDOW_CLOSING));
     	
+    	System.out.println("GUI Loaded");
+    	
     	// Exemplo de alterações nos dados e q interface atualizado de acordo
     	/*    	
     	IVector2D pPos = new IVector2D( Singletons.heroPosition.x , Singletons.heroPosition.y );
@@ -58,6 +63,27 @@ public class APP extends JFrame {
     	AStarPath asp = AStar.getPath( new IVector2D(10,0) );
     	DebugMap.printAStarPath(asp);
  		*/
+    	
+    	
+    	//DebugMap.setFrontinerAround( Singletons.heroPosition );
+    	
+    
+    	
+    	
+    	Prolog.start();
+    	while( 1 == 1 ) {
+    		Prolog.doStep();
+    	}
+    	
+    	
+    	/*
+    	DebugMap.discoverEntireMap();
+
+    	Singletons.hero.moveDirection = Math.PI;
+    	Singletons.hero.setTargetPosition( Singletons.hero.realPosition.x + 2000 , Singletons.hero.realPosition.y + 2000 );
+    	
+    	Singletons.hero.setTargetDirection( 0 );
+    	*/
     	
 	}
 	

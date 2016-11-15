@@ -47,5 +47,27 @@ public class DVector2D {
 		}
 	}
 	
+	public double getDirectionRAD() {
+		double direction = 0;
+
+		if( this.x == 0 ) {
+			if( this.y > 0 ) {
+				direction = Math.PI * 0.5;
+			} else {
+				direction = Math.PI * 1.5;
+			}		
+		} else if ( this.y == 0 ) {
+			if( this.x > 0 ) {
+				direction = 0;
+			} else {
+				direction = Math.PI;
+			}
+		} else {
+			direction = Math.atan2( this.y , this.x );
+		}
+		
+		return direction;
+	}
+	
 	
 }

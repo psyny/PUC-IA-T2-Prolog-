@@ -110,6 +110,17 @@ public class IsoGrid extends JLayeredPane {
 		return projection;
 	}
 	
+	public static DVector2D getTileCenterRealPosition( int x , int y ) {
+		DVector2D rPos = new DVector2D( 0 , 0 );
+		
+		// IVector2D centerPosition = IsoGrid.getProjection( ( x + 0.5 ) * IsoGrid.isoTileSize.x ,  ( y + 0.5 ) * IsoGrid.isoTileSize.y , true , false );
+		// rPos.x = centerPosition.x ;
+		// rPos.y = centerPosition.y ;
+		rPos = new DVector2D( ( x + 0.5 ) * IsoGrid.isoTileSize.x ,  ( y + 0.5 ) * IsoGrid.isoTileSize.y );
+		
+		return rPos;
+	}
+	
 	public static IVector2D getOrtogonalSize( ) {
 		IVector2D canonSize1 = IsoGrid.getProjection( ( 1 * IsoGrid.isoTileSize.x ) , ( 0 * IsoGrid.isoTileSize.y ) , false );
 		

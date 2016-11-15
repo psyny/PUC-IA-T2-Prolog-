@@ -3,14 +3,17 @@ package data;
 import java.util.ArrayList;
 
 import dataTypes.*;
+import user_interface.Actor;
 import user_interface.ActorSensor;
 import user_interface.ActorStormBorder;
+import user_interface.GUI_APPWindow;
 import user_interface.IsoGrid;
 
 public class UpdateLinker implements Runnable {
 	private final int 	DELAY = 100;
 	private Thread 		thread;
-	
+	private long 		sweepMaxDelay = 1000;
+	private long 		sweepDelay = 0;
 	
 	public static void start() {
 		Singletons.updateLinker = new UpdateLinker();
@@ -21,12 +24,19 @@ public class UpdateLinker implements Runnable {
 	
 	
 	 private void threadCycle( long passed ) {
-		 
 		 // Look for discovered areas
 		 if( Singletons.gameGrid != null ) {
 			 for( ArrayList<Cell> row : Singletons.gameGrid.cells ) {
 				 for( Cell cell : row ) {
 					 cell.stormActor.updateStatus( cell );
+
+					 if( cell.contentActor != null ) {
+						 Actor actor = cell.contentActor;
+						 if( cell.destroyed == true ) {
+							 cell.contentActor = null;
+						 }						 
+						 actor.updateStatus( cell );
+					 }
 					 
 					 if( cell.visibleGrid != null ) {
 						 cell.visibleGrid.updateStatus( cell );
@@ -45,9 +55,9 @@ public class UpdateLinker implements Runnable {
 		 
 		 // Update hero position and direction
 		 if( Singletons.hero != null ) {
-			 Singletons.hero.setRealPosition( ( Singletons.heroPosition.x + 0.5 ) * IsoGrid.isoTileSize.x ,( Singletons.heroPosition.y + 0.5 ) * IsoGrid.isoTileSize.y  );
+			 //Singletons.hero.setRealPosition( ( Singletons.heroPosition.x + 0.5 ) * IsoGrid.isoTileSize.x ,( Singletons.heroPosition.y + 0.5 ) * IsoGrid.isoTileSize.y  );
 			 
-			 Singletons.hero.setOrtogonalDirection( Singletons.heroDirection );
+			 //Singletons.hero.setOrtogonalDirection( Singletons.heroDirection );
 		 }
 
 		 // Update camera

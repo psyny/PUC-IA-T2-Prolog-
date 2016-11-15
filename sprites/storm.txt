@@ -11,7 +11,7 @@ Cycle		; animation name
 
 Weak		; animation name
 2		; animation ID code
-3,169 		; animation frame start position
+3,170 		; animation frame start position
 310,160		; single frame size
 316,167		; advancement step ( usually frame size )
 1,10		; number of rows and cols of frames
@@ -20,7 +20,7 @@ Weak		; animation name
 
 Border1		; animation name
 11		; animation ID code
-3,335 		; animation frame start position
+3,337 		; animation frame start position
 310,160		; single frame size
 316,167		; advancement step ( usually frame size )
 1,10		; number of rows and cols of frames
@@ -29,7 +29,7 @@ Border1		; animation name
 
 Border2		; animation name
 12		; animation ID code
-3,501 		; animation frame start position
+3,504 		; animation frame start position
 310,160		; single frame size
 316,167		; advancement step ( usually frame size )
 1,10		; number of rows and cols of frames
@@ -38,7 +38,7 @@ Border2		; animation name
 
 Border3		; animation name
 13		; animation ID code
-3,667 		; animation frame start position
+3,671 		; animation frame start position
 310,160		; single frame size
 316,167		; advancement step ( usually frame size )
 1,10		; number of rows and cols of frames
@@ -47,7 +47,52 @@ Border3		; animation name
 
 Border4		; animation name
 14		; animation ID code
-3,833 		; animation frame start position
+3,838 		; animation frame start position
+310,160		; single frame size
+316,167		; advancement step ( usually frame size )
+1,10		; number of rows and cols of frames
+-1		; Total number of frames ( -1 set to rows*cols )
+50		; frame change speed ( millis )
+
+Frontier	; animation name
+15		; animation ID code
+3,1005		; animation frame start position
+310,160		; single frame size
+316,167		; advancement step ( usually frame size )
+1,10		; number of rows and cols of frames
+-1		; Total number of frames ( -1 set to rows*cols )
+50		; frame change speed ( millis )
+
+Border1F	; animation name
+111		; animation ID code
+3,1172 		; animation frame start position
+310,160		; single frame size
+316,167		; advancement step ( usually frame size )
+1,10		; number of rows and cols of frames
+-1		; Total number of frames ( -1 set to rows*cols )
+50		; frame change speed ( millis )
+
+Border2F	; animation name
+112		; animation ID code
+3,1339 		; animation frame start position
+310,160		; single frame size
+316,167		; advancement step ( usually frame size )
+1,10		; number of rows and cols of frames
+-1		; Total number of frames ( -1 set to rows*cols )
+50		; frame change speed ( millis )
+
+Border3F	; animation name
+113		; animation ID code
+3,1506 		; animation frame start position
+310,160		; single frame size
+316,167		; advancement step ( usually frame size )
+1,10		; number of rows and cols of frames
+-1		; Total number of frames ( -1 set to rows*cols )
+50		; frame change speed ( millis )
+
+Border4F	; animation name
+114		; animation ID code
+3,1673 		; animation frame start position
 310,160		; single frame size
 316,167		; advancement step ( usually frame size )
 1,10		; number of rows and cols of frames

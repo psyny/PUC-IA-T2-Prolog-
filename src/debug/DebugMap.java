@@ -21,6 +21,23 @@ public class DebugMap {
 		}
 	}
 	
+	public static void setFrontinerAround( IVector2D pos ) {
+		if( DebugMap.debugMode == false ) return;
+		
+		Grid grid = Singletons.gameGrid;
+		Cell cell = null;
+		
+		for( int x = pos.x -1 ; x <= pos.x + 1 ; x++ ) {
+			for( int y = pos.y - 1 ; y <= pos.y + 1 ; y++ ) {
+				cell = null;
+				cell = grid.getCell(x, y);
+				if( cell != null && cell.discovered == false ) {
+					cell.frontier = true;
+				}
+			}
+		}
+	}
+	
 	
 	public static void printAStarPath( AStarPath asp ) {
 		System.out.println( "Cells: ");

@@ -12,6 +12,9 @@ public class ActorWater extends Actor {
 	
 	public ActorWater(int sizeX, int sizeY) {
 		super(sizeX, sizeY);
+		
+		this.destroyDelay = 100;
+		this.destroyEffect = EffectType.WATERSPLASH;
 		// TODO Auto-generated constructor stub
 	}
 	

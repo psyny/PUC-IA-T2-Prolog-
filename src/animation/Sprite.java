@@ -61,7 +61,7 @@ public abstract class Sprite extends JPanel {
     	int sizeY = (int)(this.lastFrame.size.y * this.scale);
     	
     	this.setSize( sizeX , sizeY );
-    	this.setPreferredSize( new Dimension( sizeX , sizeY ));
+    	this.setPreferredSize( new Dimension( sizeX , sizeY ) );
 
         g.drawImage( this.lastFrame.image , 0 , 0 , sizeX , sizeY , 
         		this.lastFrame.origin.x, 

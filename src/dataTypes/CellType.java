@@ -9,5 +9,6 @@ public enum CellType {
 	CYCLONE,
 	HERO,
 	GAS,
-	WATER
+	WATER,
+	EXIT
 }

@@ -4,5 +4,7 @@ public enum EffectType {
 	LIGHTNING,
 	BLACKSMOKE,
 	WHITESMOKE,
+	WATERSPLASH,
+	POWERUP,
 	DIRT
 }
