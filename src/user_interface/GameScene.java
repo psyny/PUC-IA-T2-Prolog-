@@ -2,6 +2,7 @@ package user_interface;
 
 import java.awt.Component;
 import java.awt.Point;
+import java.awt.Toolkit;
 import java.util.ArrayList;
 
 import javax.swing.JLabel;
@@ -56,6 +57,7 @@ public class GameScene extends Scene {
 		actor.setRealPosition( ( x + ox ) * IsoGrid.isoTileSize.x , ( y + oy ) * IsoGrid.isoTileSize.y );
 		
 		this.add( actor );
+		Toolkit.getDefaultToolkit().sync();
 		this.setLayer( actor , layer);
 		
 		actor.parent = this;
@@ -65,9 +67,9 @@ public class GameScene extends Scene {
 	public void createEffectInPosition( EffectType effect , int layer ,  int x , int y ) {
 		ActorEffect actor = ActorFactory.fabricateEffect( effect );
 		
-		actor.setLocation(x, y);
-		
 		this.add( actor );
+		Toolkit.getDefaultToolkit().sync();
+		actor.setLocation(x, y);
 		this.setLayer( actor , layer);
 		
 		actor.parent = this;
@@ -76,10 +78,10 @@ public class GameScene extends Scene {
 	
 	public void createEffectInRealPosition( EffectType effect , int layer ,  double x , double y ) {
 		ActorEffect actor = ActorFactory.fabricateEffect( effect );
-		
+
+		this.add( actor );		
+		Toolkit.getDefaultToolkit().sync();
 		actor.setRealPosition(x, y);
-		
-		this.add( actor );
 		this.setLayer( actor , layer);
 		
 		actor.parent = this;
