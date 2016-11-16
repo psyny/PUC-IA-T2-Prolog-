@@ -18,7 +18,11 @@ public class PrologCellDecidions {
 				
 			case "sair":
 				this.cmd = Commands.EXIT;
-				break;			
+				break;		
+				
+			case "atirar":
+				this.cmd = Commands.FIRE;
+				break;						
 		}
 	}
 }

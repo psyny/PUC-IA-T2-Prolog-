@@ -114,6 +114,7 @@ public class Prolog {
 					break;
 					
 				case MOVE:
+				case FIRE:
 					if( cell.x == Singletons.heroPosition.x && cell.y == Singletons.heroPosition.y ) {
 						newPath = null;
 						newPath = AStar.getPath( new IVector2D(cell.x,cell.y));
@@ -124,7 +125,12 @@ public class Prolog {
 					if( newPath != null ) {
 						pathList.add(newPath);	
 					}
-					break;
+					
+					if( cell.cmd == Commands.FIRE ) {
+						newPath.commandList.remove( newPath.commandList.size() - 1 );
+						newPath.commandList.add( Commands.FIRE );
+					}
+					break;	
 			}
 		}
 	
@@ -160,6 +166,7 @@ public class Prolog {
 				bestPathRaw = aPath;
 			}
 		}
+	
 		
 		// Tell Prolog to do the path
 		int turnStep = 0;
@@ -284,7 +291,12 @@ public class Prolog {
 							Singletons.hero.setTargetPosition( target.x , target.y );
 						}
 
+						break; // Case Move
+						
+					case FIRE:
+						// Todo
 						break;
+						
 				}
 				
 				while( Singletons.hero.isStopped() == false || Singletons.paused == true ) {
