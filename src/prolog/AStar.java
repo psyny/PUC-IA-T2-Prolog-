@@ -128,12 +128,14 @@ public class AStar {
 		if( cell == null || cell.ASData.type != 0 ) return;
  		if( cell.discovered == false && cell.frontier == false && cell != finalDestination ) return;
 		if( cell.destroyed == false ) {
-			switch( cell.type ) {
-				case BOSS:
-				case ENEMY:
-				case CYCLONE:
-				case LANDMINE:
-					return;
+			if( cell != finalDestination ) {
+				switch( cell.type ) {
+					case BOSS:
+					case ENEMY:
+					case CYCLONE:
+					case LANDMINE:
+						return;
+				}
 			}
 		}
 		

@@ -108,12 +108,10 @@ public class Prolog {
 
 		
 		for( PrologCellDecidions cell : cells ) {
-			switch( cell.cmd ) {
-				case EXIT:
-					Singletons.victory = true;
-					break;
-					
+			switch( cell.cmd ) {				
 				case MOVE:
+				case FIRE:
+				case EXIT:
 					if( cell.x == Singletons.heroPosition.x && cell.y == Singletons.heroPosition.y ) {
 						newPath = null;
 						newPath = AStar.getPath( new IVector2D(cell.x,cell.y));
@@ -124,7 +122,15 @@ public class Prolog {
 					if( newPath != null ) {
 						pathList.add(newPath);	
 					}
-					break;
+					
+					if( cell.cmd == Commands.FIRE ) {
+						newPath.commandList.remove( newPath.commandList.size() - 1 );
+						newPath.commandList.add( Commands.FIRE );
+					} 
+					else if( cell.cmd == Commands.EXIT ) {
+						newPath.commandList.add( Commands.EXIT );
+					}
+					break;	
 			}
 		}
 	
@@ -160,11 +166,12 @@ public class Prolog {
 				bestPathRaw = aPath;
 			}
 		}
-		
+	
 		
 		// Tell Prolog to do the path
 		int turnStep = 0;
 		int turnType = 0;
+		int animationsToIgnore = 0;
 		if( bestPathRaw != null ) {
 			for( int i = 0 ; i < bestPathRaw.commandList.size() ; i++ ) {
 				Commands cmd = bestPathRaw.commandList.get(i);
@@ -175,6 +182,11 @@ public class Prolog {
 				
 				Toolkit.getDefaultToolkit().sync();
 				Singletons.hero.updateLayer();
+				
+				if( animationsToIgnore > 0 ) {
+					animationsToIgnore--;
+					continue;
+				}
 				
 				switch( cmd ) {
 					case TURN:
@@ -244,21 +256,51 @@ public class Prolog {
 						// Preview next steps
 						if( i+1 < bestPathRaw.commandList.size() ) {
 							if( bestPathRaw.commandList.get(i+1) == Commands.TURN ) {
-								// Drift
-								Singletons.hero.acceleration = -0.1;
-								Singletons.hero.setMoveSpeed( 1 );
-								Singletons.hero.setTargetPosition( target.x , target.y , true );
+								// Turn Drift
+								int turns = 1;
+								animationsToIgnore++;
+								
+								/*
+								if( i+2 < bestPathRaw.commandList.size() && bestPathRaw.commandList.get(i+2) == Commands.TURN  ) {
+									
+									//  U-Turn Drift
+									turns++;
+									animationsToIgnore++;
+									
+									if( i-1 >= 0 && bestPathRaw.commandList.get(i-1) == Commands.MOVE ) {
+										if( i+3 < bestPathRaw.commandList.size() && bestPathRaw.commandList.get(i+3) == Commands.TURN  ) {
+											//  3/4 Turn Drift
+											turns++;
+											animationsToIgnore++;
+										}
+									}
+								}
+								*/
+								
+								
+								Singletons.hero.setMaxMoveSpeed( 1 );
+								Singletons.hero.setTargetPosition( target.x , target.y , true , turns );
+								
  							} else {
  								// Next command is another move, can speedup a bit
- 								Singletons.hero.setMoveSpeed( 1.2 );
+								Singletons.hero.setMaxMoveSpeed( 1.3 );
 								Singletons.hero.setTargetPosition( target.x , target.y );
 							}
 						} else {
-							Singletons.hero.resetMoveSpeed();
+							Singletons.hero.setMaxMoveSpeed( 1 );
 							Singletons.hero.setTargetPosition( target.x , target.y );
 						}
 
+						break; // Case Move
+						
+					case FIRE:
+						// Todo
 						break;
+						
+					case EXIT:
+						Singletons.victory = true;
+						break;
+						
 				}
 				
 				while( Singletons.hero.isStopped() == false || Singletons.paused == true ) {

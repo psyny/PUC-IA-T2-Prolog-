@@ -77,15 +77,17 @@ public class GameScene extends Scene {
 	}
 	
 	public void createEffectInRealPosition( EffectType effect , int layer ,  double x , double y ) {
-		ActorEffect actor = ActorFactory.fabricateEffect( effect );
-
-		this.add( actor );		
-		Toolkit.getDefaultToolkit().sync();
-		actor.setRealPosition(x, y);
-		this.setLayer( actor , layer);
-		
-		actor.parent = this;
-		actor.stage = this;		
+		synchronized(this) {
+			ActorEffect actor = ActorFactory.fabricateEffect( effect );
+	
+			this.add( actor );		
+			Toolkit.getDefaultToolkit().sync();
+			actor.setRealPosition(x, y);
+			this.setLayer( actor , layer);
+			
+			actor.parent = this;
+			actor.stage = this;		
+		}
 	}	
 	
 	public void loadCells( Grid gameGrid ) {	

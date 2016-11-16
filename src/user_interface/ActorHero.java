@@ -27,8 +27,14 @@ public class ActorHero extends Actor {
 	
 	private double defaultMoveSpeed = 8;
 	private double defaultTurnSpeed = 0.07;
+	private double turnSpeedFactor = 1;
+	
 	private boolean addDrift = false;
 	public double acceleration = 0;
+	
+	private double startingDist = -1;
+	private double minMoveSpeed = 0.1;
+	private double maxMoveSpeed = this.defaultMoveSpeed;
 	
 	
 	private long particleSpawnRate = 100;
@@ -119,20 +125,26 @@ public class ActorHero extends Actor {
 	}
 	
 	public void setTargetPosition( double x , double y ) {
-		this.setTargetPosition(x, y,false);
+		this.setTargetPosition(x, y,false,0);
 		
 	}
 	
-	public void setTargetPosition( double x , double y , boolean addDrift ) {
+	public void setTargetPosition( double x , double y , boolean addDrift , int turns ) {
 		this.targetPosition = new DVector2D( x , y );
 		this.state = MoveState.SEEKING;
 		this.addDrift = addDrift;
 		
 		this.setMoveDirection( this.driftDirection );
+		
+		this.startingDist = -1;
 
 		if( addDrift == true ) {
 			double rad = this.getRadDirectionFromOrtogonal( Singletons.heroDirection );
-			this.setTargetDirection( rad - ( Math.PI * 0.5 ) , true );
+			this.setTargetDirection( rad - ( Math.PI * ( 0.5 * turns ) ) , true );
+			this.turnSpeedFactor = turns * 0.6;
+			this.minMoveSpeed = 2.5 - ( turns * 0.5 );
+		} else {
+			this.turnSpeedFactor = 1;
 		}
 	}
 	
@@ -146,6 +158,8 @@ public class ActorHero extends Actor {
 		if( moving == false ) {
 			this.addDrift = false;
 			this.state = MoveState.DRIFTING;
+		} else {
+			this.turnSpeedFactor = 1;
 		}
 	}	
 	
@@ -184,18 +198,15 @@ public class ActorHero extends Actor {
 	
 	public void setMoveSpeed( double factor ) {
 		this.moveSpeed = this.defaultMoveSpeed * factor;
+		this.maxMoveSpeed = this.defaultMoveSpeed;
 	}	
 	
 	public void setMinMoveSpeed( double factor ) {
-		if( this.moveSpeed < this.defaultMoveSpeed * factor ) {
-			this.moveSpeed = this.defaultMoveSpeed * factor;
-		}
+		this.minMoveSpeed = this.defaultMoveSpeed * factor;
 	}	
 	
 	public void setMaxMoveSpeed( double factor ) {
-		if( this.moveSpeed > this.defaultMoveSpeed * factor ) {
-			this.moveSpeed = this.defaultMoveSpeed * factor;
-		}
+		this.maxMoveSpeed = this.defaultMoveSpeed * factor;
 	}	
 	
 	public void updateMoveDirection() {
@@ -228,6 +239,11 @@ public class ActorHero extends Actor {
 			double targetDirection = dirVector.getDirectionRAD();
 			
 			double dirMod = dirVector.getModulus();
+			
+			if( this.startingDist < 0 ) {
+				this.startingDist = dirMod / 2;
+			}
+			
 			if( dirMod < this.moveSpeed ) {
 				this.setRealPosition( targetPosition.x , targetPosition.y );
 				this.targetPosition = null;
@@ -245,7 +261,24 @@ public class ActorHero extends Actor {
 				// Sprite direction
 				if( this.addDrift == false ) {
 					this.driftDirection = this.moveDirection;
-				} 
+					
+					this.moveSpeed = this.moveSpeed + 0.2;
+					if( this.moveSpeed > this.maxMoveSpeed ) {
+						this.moveSpeed = this.maxMoveSpeed;
+					}
+				}
+				else {
+				// Speed Update
+					if( this.startingDist >= 0 ) {
+						this.moveSpeed = this.defaultMoveSpeed * ( dirMod / this.startingDist );
+						if( this.moveSpeed > this.defaultMoveSpeed ) {
+							this.moveSpeed = this.defaultMoveSpeed;
+						}
+						else if( this.moveSpeed < this.minMoveSpeed ) {
+							this.moveSpeed = this.minMoveSpeed;
+						}
+					}
+				}
 				
 				this.particleCounter_dirt += ( time * ( ( this.moveSpeed + 1 ) / this.defaultMoveSpeed ) );
 			}
@@ -256,9 +289,9 @@ public class ActorHero extends Actor {
 			double turn;
 			
 			if( this.addDrift == true ) {
-				turn = ( this.defaultTurnSpeed * 0.7 );
+				turn = ( this.defaultTurnSpeed * this.turnSpeedFactor );
 			} else {
-				turn = ( this.defaultTurnSpeed * 1.0 );
+				turn = ( this.defaultTurnSpeed * this.turnSpeedFactor );
 			}
 
 			if( Math.abs( this.normalizeRad(diff)) < turn ) {
@@ -267,22 +300,21 @@ public class ActorHero extends Actor {
 					this.state = MoveState.STOPED;
 				} 
 			} else {	
-				turn *= this.getTurnDirection(diff);
+				if( this.addDrift == false ) {
+					turn *= this.getTurnDirection(diff);
+				} else {
+					turn = -turn;
+				}
 				
 				if( this.moveSpeed > this.defaultMoveSpeed ) {
 					if( this.state == MoveState.DRIFTING ) {
 						this.moveSpeed = this.defaultMoveSpeed;
 					}
 				} else {	
-					this.moveSpeed = this.moveSpeed + this.acceleration;
-					
 					if( this.state == MoveState.DRIFTING ) {
-						if( this.moveSpeed < 0 ) {
-							this.moveSpeed = 0;
-						}
-					} else {
-						if( this.moveSpeed < 2 ) {
-							this.moveSpeed = 2;
+						this.moveSpeed = this.moveSpeed + this.acceleration;
+						if( this.moveSpeed < 0.2 ) {
+							this.moveSpeed = 0.2;
 						}
 					}
 				}		
@@ -309,7 +341,9 @@ public class ActorHero extends Actor {
 				pos.x += - 35 + ( Math.random() * 70 );
 				pos.y += - 35 + ( Math.random() * 70 );
 				
-				Singletons.actorScene.createEffectInRealPosition( EffectType.DIRT , 6 , pos.x , pos.y );
+				synchronized(this) {
+					Singletons.actorScene.createEffectInRealPosition( EffectType.DIRT , 6 , pos.x , pos.y );
+				}
 			}
 		}		
 		
