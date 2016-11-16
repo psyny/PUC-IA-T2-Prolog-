@@ -108,13 +108,10 @@ public class Prolog {
 
 		
 		for( PrologCellDecidions cell : cells ) {
-			switch( cell.cmd ) {
-				case EXIT:
-					Singletons.victory = true;
-					break;
-					
+			switch( cell.cmd ) {				
 				case MOVE:
 				case FIRE:
+				case EXIT:
 					if( cell.x == Singletons.heroPosition.x && cell.y == Singletons.heroPosition.y ) {
 						newPath = null;
 						newPath = AStar.getPath( new IVector2D(cell.x,cell.y));
@@ -129,6 +126,9 @@ public class Prolog {
 					if( cell.cmd == Commands.FIRE ) {
 						newPath.commandList.remove( newPath.commandList.size() - 1 );
 						newPath.commandList.add( Commands.FIRE );
+					} 
+					else if( cell.cmd == Commands.EXIT ) {
+						newPath.commandList.add( Commands.EXIT );
 					}
 					break;	
 			}
@@ -295,6 +295,10 @@ public class Prolog {
 						
 					case FIRE:
 						// Todo
+						break;
+						
+					case EXIT:
+						Singletons.victory = true;
 						break;
 						
 				}
