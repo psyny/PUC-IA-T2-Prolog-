@@ -50,7 +50,9 @@ public class ActorHero extends Actor {
 		this.setOrtogonalDirection( 1 );
 		
 		this.updateAnimation();
-		// TODO Auto-generated constructor stub
+		
+		this.destroyDelay = 0;
+		this.destroyEffect = EffectType.EXPLOSION_BIG;
 	}
 	
 
@@ -125,8 +127,9 @@ public class ActorHero extends Actor {
 	}
 	
 	public void setTargetPosition( double x , double y ) {
-		this.setTargetPosition(x, y,false,0);
-		
+		synchronized(this) {
+			this.setTargetPosition(x, y,false,0);
+		}
 	}
 	
 	public void setTargetPosition( double x , double y , boolean addDrift , int turns ) {
@@ -161,6 +164,7 @@ public class ActorHero extends Actor {
 		} else {
 			this.turnSpeedFactor = 1;
 		}
+		
 	}	
 	
 	public void setTurn( int ortDir  ) {
@@ -175,6 +179,37 @@ public class ActorHero extends Actor {
 		}
 		
 		this.setTargetDirection( this.getRadDirectionFromOrtogonal(ortDir) , moving );
+	}
+	
+	public void shot() {
+		DVector2D pos = new DVector2D( this.realPosition.x , this.realPosition.y );
+		
+		IVector2D targetPos = new IVector2D( Singletons.heroPosition.x , Singletons.heroPosition.y );
+		
+		
+		switch( Singletons.heroDirection ) {
+			case 1:
+				targetPos.y++;
+				break;
+			case 2:
+				targetPos.x++;
+				break;
+			case 3:
+				targetPos.y--;
+				break;
+			case 4:
+				targetPos.x--;
+				break;
+		}
+		
+		targetPos = new IVector2D( Singletons.heroPosition.x , Singletons.heroPosition.y );
+		targetPos.y--;
+		
+		
+		DVector2D target = IsoGrid.getTileCenterRealPosition( targetPos.x , targetPos.y );
+		this.shotsOnTheFly++;		
+			
+		new ActorMissile( pos , target , this );
 	}
 	
 	public double normalizeRad( double rad ) {
@@ -214,7 +249,7 @@ public class ActorHero extends Actor {
 	}
 	
 	public boolean isStopped( ) {
-		if( this.state == MoveState.STOPED ) {
+		if( this.state == MoveState.STOPED && this.shotsOnTheFly == 0 ) {
 			return true;
 		} else {
 			return false;
@@ -222,8 +257,10 @@ public class ActorHero extends Actor {
 	}
 	
 	public void updateLayer() {
-		if( this.stage != null ) {
-			this.stage.setLayer( this , 5 );
+		if( this.stage != null && ( Singletons.victory == false || Singletons.death == false ) ) {
+			synchronized( Singletons.gameCamera ) {
+				this.stage.setLayer( this , 5 );
+			}
 		}
 	}
 	

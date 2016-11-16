@@ -14,6 +14,8 @@ import org.jpl7.*;
 public class Prolog {
 	public static Prolog 		prolog = null;
 	public static PrologState	state;
+	
+	public static Commands lastCommand;
 
 	
 	private Prolog(){
@@ -97,7 +99,7 @@ public class Prolog {
 			
 			cells.add( new PrologCellDecidions(x,y,o,String.valueOf(solution[i].get("T"))) );
 			
-			//System.out.println( "Alvo: x: " + x + " | y: " + y );
+			//System.out.println( "Prolog CMD: x: " + x + " | y: " + y + " | T : " + String.valueOf(solution[i].get("T")) );
 		}
 		
 		
@@ -107,6 +109,7 @@ public class Prolog {
 		AStarPath 		bestPathClustered = null;
 
 		
+		boolean repeatFlag = false;
 		for( PrologCellDecidions cell : cells ) {
 			switch( cell.cmd ) {				
 				case MOVE:
@@ -131,6 +134,11 @@ public class Prolog {
 						newPath.commandList.add( Commands.EXIT );
 					}
 					break;	
+					
+					
+				case REPEATLAST:
+					repeatFlag = true;
+					break;
 			}
 		}
 	
@@ -175,6 +183,16 @@ public class Prolog {
 		if( bestPathRaw != null ) {
 			for( int i = 0 ; i < bestPathRaw.commandList.size() ; i++ ) {
 				Commands cmd = bestPathRaw.commandList.get(i);
+				Prolog.lastCommand = cmd;
+				
+				// DEBUG!
+				/*
+				if( Singletons.heroPosition.x == 0 && Singletons.heroPosition.y == 2 ) {
+					cmd = Commands.FIRE;
+					Singletons.hero.setMoveSpeed(0);
+				}
+				*/
+				// DEBUG!
 	
 				Prolog.doQuery("acao(" + Translations.getPrologCommandString(cmd) + ")" );			
 						
@@ -294,7 +312,7 @@ public class Prolog {
 						break; // Case Move
 						
 					case FIRE:
-						// Todo
+						Singletons.hero.shot();
 						break;
 						
 					case EXIT:

@@ -22,7 +22,11 @@ public class PrologCellDecidions {
 				
 			case "atirar":
 				this.cmd = Commands.FIRE;
-				break;						
+				break;		
+				
+			case "repetir":
+				this.cmd = Commands.REPEATLAST;
+				break;					
 		}
 	}
 }

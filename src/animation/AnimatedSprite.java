@@ -256,6 +256,7 @@ public class AnimatedSprite extends Sprite implements Animable {
 						this.animState.currentAnimationFrame = lastFrame;
 						
 						if( this.loopType == LoopType.END_DIE ) {
+							//System.out.println("Deletando: " + this.spriteFile );
 							this.delete();
 							return;
 						}

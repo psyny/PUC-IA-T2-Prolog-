@@ -107,7 +107,19 @@ public class ActorFactory {
 				newActor = new ActorEffect( 130 , 130 , type );
 				newActor.moveDirection = Math.PI * ( 1.4 + ( Math.random() * 0.2 ) );
 				newActor.moveSpeed = 1 + ( Math.random() * 2 );
-				break;				
+				break;		
+				
+			case WHITESMOKE:
+				newActor = new ActorEffect( 130 , 130 , type );
+				newActor.moveDirection = Math.PI * ( 1.4 + ( Math.random() * 0.2 ) );
+				newActor.moveSpeed = 1 + ( Math.random() * 2 );
+				break;	
+				
+			case EXPLOSION_1:
+			case EXPLOSION_2:
+			case EXPLOSION_BIG:	
+				newActor = new ActorEffect( 64 , 64 , type );
+				break;						
 		}
 		
 		return newActor;

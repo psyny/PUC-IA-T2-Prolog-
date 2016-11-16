@@ -5,5 +5,6 @@ public enum Commands {
 	MOVE,
 	PICKUP,
 	FIRE,
+	REPEATLAST,
 	EXIT
 }

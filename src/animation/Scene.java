@@ -4,15 +4,21 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Toolkit;
+import java.util.ArrayList;
 
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
+
+import data.Singletons;
+import user_interface.Actor;
 
 public class Scene extends JLayeredPane implements Animable {
 	private final int DELAY = 25;
 	private Thread cameraThread;
 	
 	public double scale;
+	
+	protected ArrayList<Actor> toAdd = new ArrayList<Actor>();
 
 	public Scene( int x , int y , int w , int h) {
 		this.setLayout( null );
@@ -45,10 +51,21 @@ public class Scene extends JLayeredPane implements Animable {
     
 	@Override
 	public void passTime(long time) {
+		
     	for( Component comp : this.getComponents() ) {
     		if (comp instanceof Animable ) {
     			((Animable) comp).passTime( time );
     		}
+    	}
+    
+    	synchronized( Singletons.gameCamera ) {	
+	    	for( Actor act : this.toAdd ) {
+	    		
+		    		this.add( act );
+		    		this.setLayer( act , ((act.getProjectionCenter().y / 20 ) + act.desiredLayer ));
+	    	}
+	    	
+    		this.toAdd.clear();
     	}
 	}	
 }

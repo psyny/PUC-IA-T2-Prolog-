@@ -65,10 +65,12 @@ public class Camera extends JScrollPane implements Runnable , MouseMotionListene
     }	
 	
     private void threadCycle( long passed ) {
-    	for( Component comp : this.scenes ) {
-    		if (comp instanceof Animable ) {
-    			((Animable) comp).passTime( passed );
-    		}
+    	synchronized( Singletons.gameCamera ) {	
+	    	for( Component comp : this.scenes ) {
+	    		if (comp instanceof Animable ) {
+	    			((Animable) comp).passTime( passed );
+	    		}
+	    	}
     	}
     	
     	for( Animable anim : this.animableList ) {

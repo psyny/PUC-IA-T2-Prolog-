@@ -40,9 +40,31 @@ public class ActorEffect extends Actor {
 				spriteName = "smokeDirt.txt";
 				offset.x = 0;
 				offset.y = 0;
-				break;				
+				break;		
 				
+			case WHITESMOKE:
+				spriteName = "smokeMissile.txt";
+				offset.x = 0;
+				offset.y = 0;
+				break;		
 				
+			case EXPLOSION_1:
+				spriteName = "testExplosion.txt";
+				offset.x = 0;
+				offset.y = 0;
+				break;	
+				
+			case EXPLOSION_2:
+				spriteName = "testExplosion.txt";
+				offset.x = 0;
+				offset.y = 0;
+				break;		
+				
+			case EXPLOSION_BIG:
+				spriteName = "testExplosion.txt";
+				offset.x = 0;
+				offset.y = 0;
+				break;						
 		}
 		
 		
@@ -57,7 +79,7 @@ public class ActorEffect extends Actor {
 		this.life += time;
 		
 		if( this.life > 10000 ) {
-			System.out.println("DEBUG: ANCIAO!");
+			//System.out.println("DEBUG: ANCIAO!");
 		}
 		
 		super.passTime(time);

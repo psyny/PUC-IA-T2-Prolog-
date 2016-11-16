@@ -45,50 +45,50 @@ public class GameScene extends Scene {
 	
 	@Override
 	public void setLayer( Component comp , int layer ) {
-		super.setLayer( comp , (((Actor)comp).getProjectionCenter().y / 20 ) + layer );
+		synchronized( Singletons.gameCamera ) {	
+			super.setLayer( comp , (((Actor)comp).getProjectionCenter().y / 20 ) + layer );
+		}
 	}
-	
+
 	public void createEffectInTile( EffectType effect , int layer ,  int x , int y ) {
 		this.createEffectInTile( effect , layer, x, y , 0.5 , 0.5 );
 	}
 	
 	public void createEffectInTile( EffectType effect , int layer ,  int x , int y , double ox , double oy ) {
 		ActorEffect actor = ActorFactory.fabricateEffect( effect );
-		actor.setRealPosition( ( x + ox ) * IsoGrid.isoTileSize.x , ( y + oy ) * IsoGrid.isoTileSize.y );
 		
-		this.add( actor );
-		Toolkit.getDefaultToolkit().sync();
-		this.setLayer( actor , layer);
-		
+		actor.setRealPosition( ( x + ox ) * IsoGrid.isoTileSize.x , ( y + oy ) * IsoGrid.isoTileSize.y );	
+		actor.desiredLayer = layer;
 		actor.parent = this;
-		actor.stage = this;		
-	}
+		actor.stage = this;	
 	
-	public void createEffectInPosition( EffectType effect , int layer ,  int x , int y ) {
-		ActorEffect actor = ActorFactory.fabricateEffect( effect );
-		
-		this.add( actor );
-		Toolkit.getDefaultToolkit().sync();
-		actor.setLocation(x, y);
-		this.setLayer( actor , layer);
-		
-		actor.parent = this;
-		actor.stage = this;
+		synchronized( Singletons.gameCamera ) {	
+			this.toAdd.add( actor );
+		}		
 	}
 	
 	public void createEffectInRealPosition( EffectType effect , int layer ,  double x , double y ) {
-		synchronized(this) {
-			ActorEffect actor = ActorFactory.fabricateEffect( effect );
-	
-			this.add( actor );		
-			Toolkit.getDefaultToolkit().sync();
-			actor.setRealPosition(x, y);
-			this.setLayer( actor , layer);
-			
-			actor.parent = this;
-			actor.stage = this;		
+		ActorEffect actor = ActorFactory.fabricateEffect( effect );
+
+		actor.setRealPosition(x, y);	
+		actor.desiredLayer = layer;
+		actor.parent = this;
+		actor.stage = this;	
+		
+		synchronized( Singletons.gameCamera ) {	
+			this.toAdd.add( actor );
 		}
 	}	
+	
+	public void addActor( Actor actor , int layer ) {
+		actor.desiredLayer = layer;
+		actor.parent = this;
+		actor.stage = this;		
+		
+		synchronized( Singletons.gameCamera ) {	
+			this.toAdd.add( actor );
+		}
+	}
 	
 	public void loadCells( Grid gameGrid ) {	
 		// Populate Area

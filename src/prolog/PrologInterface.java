@@ -94,7 +94,6 @@ abstract public class PrologInterface {
 			case AMMO:
 				query = Prolog.doQuery("municao(X)" );	
 				solution = query.allSolutions();
-				
 				Singletons.heroAmmo = java.lang.Integer.parseInt( String.valueOf(solution[0].get("X")) );
 				break;
 				
@@ -147,7 +146,7 @@ abstract public class PrologInterface {
 				PrologInterface.printFromProlog( PrintTypes.ENERGY );
 				PrologInterface.printFromProlog( PrintTypes.SCORE );	
 				PrologInterface.printFromProlog( PrintTypes.WATER );	
-				//PrologInterface.printFromProlog( PrintTypes.DEBUG );					
+				PrologInterface.printFromProlog( PrintTypes.DEBUG );					
 				break;
 		
 			case SENSORS:
@@ -214,11 +213,11 @@ abstract public class PrologInterface {
 				break;	
 				
 			case DEBUG:
-				query = Prolog.doQuery("debuga( X , Y , A , B )" );	
+				query = Prolog.doQuery("dano_dado( X  )" );	
 				solution = query.allSolutions();
 				for( int i = 0 ; i < solution.length ; i++ ) {
 					System.out.println("Debug A: " 
-							+ String.valueOf(solution[i].get("X")) + " | " + String.valueOf(solution[i].get("Y")) + " | " + String.valueOf(solution[i].get("A")) + " | " + String.valueOf(solution[i].get("B"))  );
+							+ String.valueOf(solution[i].get("X")) );
 				}
 				break;
 		}

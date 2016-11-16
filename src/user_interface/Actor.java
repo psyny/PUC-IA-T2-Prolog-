@@ -33,6 +33,8 @@ public class Actor extends JLayeredPane implements Animable {
 	
 	private ArrayList<innerSprite> innerSprites;
 	
+	public int desiredLayer = 0;
+	
 	public boolean 		destroing = false;
 	public EffectType 	destroyEffect = null;
 	public long			destroyDelay = 0;
@@ -40,6 +42,8 @@ public class Actor extends JLayeredPane implements Animable {
 	
 	public double moveSpeed = 0;
 	public double moveDirection = 0;
+	
+	public int shotsOnTheFly = 0;
 	
 
 	public Actor( int sizeX , int sizeY ) {
