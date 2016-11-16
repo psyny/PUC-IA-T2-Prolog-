@@ -1,0 +1,11 @@
+missile.png
+
+Missile		; Set Name
+1		; Set ID code
+0,0 		; Set start position
+40,40 		; Single tile size
+40,40		; Advancement step ( usually = tile size )
+1,32		; Number of rows and cols of Tiles in Image
+32		; Total number of tiles ( -1 set to rows*cols )
+
+#		; End of File Mark
