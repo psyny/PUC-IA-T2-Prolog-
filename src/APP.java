@@ -21,15 +21,26 @@ public class APP extends JFrame {
 	public static void main(String[] args) throws InterruptedException {
 		System.out.println("Programa iniciado");
 		
-		Generator g = new Generator(8, 4, 4, 3, 3, 12, 12);
-		try
-		{
-			//g.GerarMapa();
-		}
-		catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		int reply = JOptionPane.showConfirmDialog(null, "Random Map?", "Log Max" , JOptionPane.YES_NO_OPTION);
+        if (reply == JOptionPane.YES_OPTION) {
+        	Singletons.randomMap = true;
+        }
+        else {
+        	Singletons.randomMap = false;
+        }
+		
+
+        if( Singletons.randomMap == true  ) {
+			Generator g = new Generator(8, 4, 4, 3, 3, 12, 12);
+			try
+			{
+				g.GerarMapa();
+			}
+			catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        }
 		
 		// Splash Screen
 		Splash.start();
@@ -49,38 +60,13 @@ public class APP extends JFrame {
     	
     	System.out.println("GUI Loaded");
     	
-    	// Exemplo de alterações nos dados e q interface atualizado de acordo
-    	/*    	
-    	IVector2D pPos = new IVector2D( Singletons.heroPosition.x , Singletons.heroPosition.y );
+    	
 
-    	Singletons.gameGrid.getCell( pPos.x + 1 , pPos.y + 0 ).discovered = true;    	
-    	Singletons.gameGrid.getCell( pPos.x + 0 , pPos.y + 1 ).discovered = true;
-    	Singletons.gameGrid.getCell( pPos.x + 1 , pPos.y + 1 ).discovered = true;
-		*/
-    	
-    	
-    	/* Exemplo de Debug do A*
-    	DebugMap.discoverEntireMap();
-    	AStarPath asp = AStar.getPath( new IVector2D(10,0) );
-    	DebugMap.printAStarPath(asp);
- 		*/
-    	
-    	
-    	//DebugMap.setFrontinerAround( Singletons.heroPosition );
-    	
     	Prolog.start();
     	while( 1 == 1 ) {
     		Prolog.doStep();
     	}
     	
-    	/*
-    	DebugMap.discoverEntireMap();
-
-    	Singletons.hero.moveDirection = Math.PI;
-    	Singletons.hero.setTargetPosition( Singletons.hero.realPosition.x + 2000 , Singletons.hero.realPosition.y + 2000 );
-    	
-    	Singletons.hero.setTargetDirection( 0 );
-    	*/
     	
 	}
 	

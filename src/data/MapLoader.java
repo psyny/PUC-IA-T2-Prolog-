@@ -17,7 +17,12 @@ public class MapLoader {
 	    Scanner file;
 	    file = null;
 	    
-	    String fileName = "map.txt";
+	    String fileName;
+	    if( Singletons.randomMap == true ) {
+	    	fileName = "map_random.txt";
+	    } else {
+	    	fileName = "map.txt";
+	    }
 	    
 	    // Load Map data
 	    try {

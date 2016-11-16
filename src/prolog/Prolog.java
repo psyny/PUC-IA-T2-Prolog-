@@ -184,15 +184,6 @@ public class Prolog {
 			for( int i = 0 ; i < bestPathRaw.commandList.size() ; i++ ) {
 				Commands cmd = bestPathRaw.commandList.get(i);
 				Prolog.lastCommand = cmd;
-				
-				// DEBUG!
-				/*
-				if( Singletons.heroPosition.x == 0 && Singletons.heroPosition.y == 2 ) {
-					cmd = Commands.FIRE;
-					Singletons.hero.setMoveSpeed(0);
-				}
-				*/
-				// DEBUG!
 	
 				Prolog.doQuery("acao(" + Translations.getPrologCommandString(cmd) + ")" );			
 						
@@ -333,7 +324,7 @@ public class Prolog {
 		}
 		
 		PrologInterface.updateFromProlog( UpdateTypes.ALL );
-		//PrologInterface.printFromProlog( PrintTypes.ALL );
+		PrologInterface.printFromProlog( PrintTypes.ALL );
 	}
 	
 	public static Query doQuery(String string ) {
@@ -343,7 +334,7 @@ public class Prolog {
 	public static Query doQuery(String string , boolean failAllowed ) {
 		Query query = new Query(string);
 		if( query.hasSolution() == false && failAllowed == false ) {
-			System.out.println( "DEBUG FALSE: " + string );
+			//System.out.println( "DEBUG FALSE: " + string );
 		}
 		return query;
 	}

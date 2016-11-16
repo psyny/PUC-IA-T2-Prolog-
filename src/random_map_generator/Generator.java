@@ -145,7 +145,7 @@ public class Generator {
 		
 		try{
 	        String verify, putData;
-	        File file = new File("map/map.txt");
+	        File file = new File("map/map_random.txt");
 	        file.createNewFile();
 	        FileWriter fw = new FileWriter(file);
 	        BufferedWriter bw = new BufferedWriter(fw);

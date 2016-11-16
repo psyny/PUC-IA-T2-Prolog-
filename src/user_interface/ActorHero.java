@@ -52,7 +52,7 @@ public class ActorHero extends Actor {
 		this.updateAnimation();
 		
 		this.destroyDelay = 0;
-		this.destroyEffect = EffectType.EXPLOSION_BIG;
+		this.destroyEffect = EffectType.EXPLOSION_LARGE;
 	}
 	
 
@@ -202,6 +202,10 @@ public class ActorHero extends Actor {
 				break;
 		}
 		
+		this.setOrtogonalDirection( Singletons.heroDirection , true );
+		this.moveDirection = this.driftDirection;
+		
+		Singletons.hero.setMoveSpeed( 0.4 );
 		
 		DVector2D target = IsoGrid.getTileCenterRealPosition( targetPos.x , targetPos.y );
 		this.shotsOnTheFly++;		

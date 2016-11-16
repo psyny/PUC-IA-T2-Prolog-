@@ -59,12 +59,25 @@ public class ActorEffect extends Actor {
 				offset.x = 0;
 				offset.y = 0;
 				break;		
-				
-			case EXPLOSION_BIG:
-				spriteName = "testExplosion.txt";
+
+			case EXPLOSION_LARGE:
+				spriteName = "explosionLarge.txt";
 				offset.x = 0;
-				offset.y = 0;
-				break;						
+				offset.y = -30;
+				break;			
+				
+			case EXPLOSION_HUGE:
+				spriteName = "explosionHuge.txt";
+				offset.x = 0;
+				offset.y = -30;
+				break;		
+				
+			case EXPLOSION_MINE:
+				spriteName = "mineExplosion.txt";
+				offset.x = 0;
+				offset.y = -20;
+				break;		
+				
 		}
 		
 		

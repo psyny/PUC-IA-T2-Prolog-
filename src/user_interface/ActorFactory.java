@@ -35,12 +35,16 @@ public class ActorFactory {
 				newActor = new Actor( 240 , 240 );
 				newActor.addSprite( "enemy.txt" , new IVector2D( 0 , 0 ) , 0 );
 				newActor.getAnimatedSprite().playRandomAnimation();
+				newActor.destroyDelay = 0;
+				newActor.destroyEffect = EffectType.EXPLOSION_HUGE;				
 				break;
 				
 			case BOSS:
 				newActor = new Actor( 240 , 240 );
 				newActor.addSprite( "boss.txt" , new IVector2D( 0 , 0 ) , 0 );
 				newActor.getAnimatedSprite().playRandomAnimation();
+				newActor.destroyDelay = 0;
+				newActor.destroyEffect = EffectType.EXPLOSION_HUGE;					
 				break;
 				
 			case HERO:
@@ -117,9 +121,20 @@ public class ActorFactory {
 				
 			case EXPLOSION_1:
 			case EXPLOSION_2:
-			case EXPLOSION_BIG:	
-				newActor = new ActorEffect( 64 , 64 , type );
-				break;						
+				newActor = new ActorEffect( 64 ,64 , type );
+				break;					
+				
+			case EXPLOSION_LARGE:
+				newActor = new ActorEffect( 256 ,256 , type );
+				break;			
+				
+			case EXPLOSION_HUGE:	
+				newActor = new ActorEffect( 256 ,256 , type );
+				break;			
+				
+			case EXPLOSION_MINE:	
+				newActor = new ActorEffect( 256 ,256 , type );
+				break;	
 		}
 		
 		return newActor;

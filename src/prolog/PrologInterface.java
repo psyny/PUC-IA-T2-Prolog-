@@ -7,6 +7,7 @@ import org.jpl7.Term;
 
 import data.Singletons;
 import dataTypes.Cell;
+import user_interface.EffectType;
 
 abstract public class PrologInterface {
 
@@ -81,6 +82,10 @@ abstract public class PrologInterface {
 				query = Prolog.doQuery("energia(X)" );	
 				solution = query.allSolutions();
 				
+				int newLife = java.lang.Integer.parseInt( String.valueOf(solution[0].get("X")) );
+				if( newLife < Singletons.heroLife ) {
+					Singletons.actorScene.createEffectInTile( EffectType.EXPLOSION_MINE , 10 , Singletons.heroPosition.x , Singletons.heroPosition.y );
+				}
 				Singletons.heroLife = java.lang.Integer.parseInt( String.valueOf(solution[0].get("X")) );
 				break;
 				
@@ -94,7 +99,10 @@ abstract public class PrologInterface {
 			case AMMO:
 				query = Prolog.doQuery("municao(X)" );	
 				solution = query.allSolutions();
-				Singletons.heroAmmo = java.lang.Integer.parseInt( String.valueOf(solution[0].get("X")) );
+				
+				int newAmmo = java.lang.Integer.parseInt( String.valueOf(solution[0].get("X")) );
+				Singletons.heroAmmo = newAmmo;
+				
 				break;
 				
 			case WATER:
@@ -216,7 +224,7 @@ abstract public class PrologInterface {
 				query = Prolog.doQuery("dano_dado( X  )" );	
 				solution = query.allSolutions();
 				for( int i = 0 ; i < solution.length ; i++ ) {
-					System.out.println("Debug A: " 
+					System.out.println("Dano causado: " 
 							+ String.valueOf(solution[i].get("X")) );
 				}
 				break;

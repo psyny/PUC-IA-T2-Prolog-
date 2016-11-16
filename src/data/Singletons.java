@@ -18,6 +18,8 @@ public class Singletons {
 	public static ActorHero		hero = null;	
 	public static ActorStorm 	stormGroup = null;
 	
+	public static boolean 	randomMap		= false;
+	
 	// State of the Game
 	public static boolean 	fogUndiscovery 	= true;
 	public static boolean 	centerOnHero 	= true;

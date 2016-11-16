@@ -1,0 +1,12 @@
+explosionHuge.png
+
+Cycle		; animation name
+1		; animation ID code
+0,0 		; animation frame start position
+192,192		; single frame size
+192,192		; advancement step ( usually frame size )
+4,6		; number of rows and cols of frames
+-1		; Total number of frames ( -1 set to rows*cols )
+50		; frame change speed ( millis )
+
+#
