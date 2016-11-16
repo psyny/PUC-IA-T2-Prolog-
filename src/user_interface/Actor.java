@@ -206,9 +206,11 @@ public class Actor extends JLayeredPane implements Animable {
 			this.destroing = true;
 			
 			if( this.destroyEffect != null ) {
-				Toolkit.getDefaultToolkit().sync();
-				Singletons.actorScene.createEffectInRealPosition( this.destroyEffect , 20, this.realPosition.x , this.realPosition.y );
-				this.destroyCounter = 0;
+				synchronized(this) {
+					//Toolkit.getDefaultToolkit().sync();
+					Singletons.actorScene.createEffectInRealPosition( this.destroyEffect , 20, this.realPosition.x , this.realPosition.y );
+					this.destroyCounter = 0;
+				}
 			}
 		}
 	}
