@@ -202,9 +202,6 @@ public class ActorHero extends Actor {
 				break;
 		}
 		
-		targetPos = new IVector2D( Singletons.heroPosition.x , Singletons.heroPosition.y );
-		targetPos.y--;
-		
 		
 		DVector2D target = IsoGrid.getTileCenterRealPosition( targetPos.x , targetPos.y );
 		this.shotsOnTheFly++;		
