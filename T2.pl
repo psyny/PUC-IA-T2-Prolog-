@@ -20,12 +20,15 @@
 
 terminou(nao).
 
-acao(decidir) :-	total_ouros(X), X = 0, certeza( (Z, W) , saida ) , posicao( X , Y ) , ( X = Z , Y = W ) , acao(subir) , limpa_proximo_passo(), adiciona_proximo_passo((Z, W), 0 , sair ) , !.
-acao(decidir) :-	total_ouros(X), X =< 0, limpa_proximo_passo(), certeza( (Z, W) , saida ), adiciona_proximo_passo((Z, W), 0 , mover ) , !.
+acao(decidir) :-	total_ouros(X), X =< 0, limpa_proximo_passo(), certeza( (Z, W) , saida ), adiciona_proximo_passo((Z, W), 0 , sair ) , !.
 acao(decidir) :-	posicao(X, Y), certeza( ( X , Y ) , ouro ) , acao(pegar_objeto), acao(decidir), !.
 acao(decidir) :-	energia(V), V =< 50, ( posicao(X, Y), certeza( ( X , Y ) , power_up ) , acao(pegar_objeto) , acao(decidir) ; ( certeza( ( _ , _ ) , power_up ) , limpa_proximo_passo() , findall(_, encontrar_mais_proximo(power_up) ,_ ) , !) ).
 acao(decidir) :-	agente_olhando_para( X , Y ) , fronteira( X , Y ) , limpa_proximo_passo() , adiciona_proximo_passo((X, Y), 1 , mover ) , !.
-acao(decidir) :-	( fronteira( _ , _ ) , limpa_proximo_passo(), findall(_, encontrar_mais_proximo() ,_ )  ), !.
+acao(decidir) :-	( fronteira( _ , _ ) , limpa_proximo_passo(), encontrar_mais_proximo() ), !.
+acao(decidir) :-	sensor( ( _ , _ ) , ( _ , _ ) , inimigo(_,_)), limpa_proximo_passo(), encontrar_mais_proximo( inimigo(_,_) , mover ) , !.
+acao(decidir) :-	certeza( ( _ , _ ) , inimigo(_,_) ), municao(X), X == 5, limpa_proximo_passo(), encontrar_mais_proximo( inimigo(_,_) , atirar ) , !.
+acao(decidir) :-	score(X), X > 1500, limpa_proximo_passo(), certeza( (Z, W) , saida ), adiciona_proximo_passo((Z, W), 0 , sair ) , ! .
+acao(decidir) :-	sensor( ( _ , _ ) , ( _ , _ ) , teleporte), limpa_proximo_passo(), encontrar_mais_proximo( teleporte , mover ) , !.
 
 acao(mover_para_frente) :- 	mover(Z,W) , adiciona_a_score(-1) , ( consequencias() ; true ) , observar(Z,W) , !.
 
@@ -202,9 +205,12 @@ limpa_proximo_passo() :- findall(_,retract(proximo_passo(_,_,_)),_).
 
 encontrar_mais_proximo() :-	findall(_,menor_distancia(),_), !.
 encontrar_mais_proximo( Objeto ) :-	findall(_,menor_distancia( Objeto ),_), !.
+encontrar_mais_proximo( Objeto, Tipo ) :-	findall(_,menor_distancia( Objeto, Tipo ),_), !.
 
 menor_distancia() 			:-	fronteira( X , Y ) , posicao(Z, W), distancia_manhatam( ( Z , W ) , ( X , Y ) , Custo ) , adiciona_proximo_passo( ( X , Y ) , Custo , mover ).
 menor_distancia( Objeto ) 	:-	certeza( ( X , Y ) , Objeto ) , posicao( Z , W ), distancia_manhatam( ( Z , W ) , ( X , Y ) , Custo ) , adiciona_proximo_passo( ( X , Y ) , Custo , mover ).
+menor_distancia( Objeto, mover ) 	:-	sensor( ( _ , _ ) , ( X , Y ) , Objeto ) , posicao( Z , W ), distancia_manhatam( ( Z , W ) , ( X , Y ) , Custo ) , adiciona_proximo_passo( ( X , Y ) , Custo , mover ).
+menor_distancia( Objeto, atirar ) 	:-	certeza( ( X , Y ) , Objeto ) , posicao( Z , W ), distancia_manhatam( ( Z , W ) , ( X , Y ) , Custo ) , adiciona_proximo_passo( ( X , Y ) , Custo , mover ).
 
 mover(Z,W)		:- orientacao(direita), posicao(X, Y), Z is X + 1, W is Y, eh_no_mapa(Z, W), atualizar_posicao(Z, W), !.
 mover(Z,W)		:- orientacao(esquerda), posicao(X, Y), Z is X - 1, W is Y, eh_no_mapa(Z, W), atualizar_posicao(Z, W), !.

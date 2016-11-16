@@ -10,125 +10,152 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Generator {
-		public static int numero_buracos;
-		public static int numero_inimigos;
-		public static int numero_teleportes;
-		public static int numero_ouros;
-		public static int numero_powerup;
-		public static int dimensao_x;
-		public static int dimensao_y;
+	
+	public class Elemento{
 		
-		public static void GerarMapa() 
-		{
-			String mapa = "";
-			int chance_colocar = 10;
-			Random rnd = new Random();
-			int n_buracos= Generator.numero_buracos;
-			int n_inimigos= Generator.numero_inimigos;
-			int n_teleportes= Generator.numero_teleportes;
-			int n_ouros= Generator.numero_ouros;
-			int n_powerup= Generator.numero_powerup;
-			int dimensao_x= Generator.dimensao_x;
-			int dimensao_y= Generator.dimensao_y;
-
-			for (int i = 0; i < dimensao_y; i++) {
-				for (int j = 0; j < dimensao_x; j++) {
-					
-					int percent = rnd.nextInt(100);
-					
-					if(n_buracos == 0 && n_inimigos == 0 && n_teleportes == 0 && n_ouros == 0 && n_powerup == 0)
-					{
-						chance_colocar = -1;
-					}
-					
-					if(percent <= chance_colocar)
-					{
-						//falta checar se pode colocar objeto
-						String novo_objeto = Generator.escolher_objeto(n_buracos, n_inimigos, n_teleportes, n_ouros, n_powerup);
-						mapa += novo_objeto;
-						
-						if(novo_objeto == "P")
-							n_buracos -= 1;
-						if(novo_objeto == "D")
-							n_inimigos -= 1;
-						if(novo_objeto == "T")
-							n_teleportes -= 1;
-						if(novo_objeto == "O")
-							n_ouros -= 1;
-						if(novo_objeto == "P")
-							n_powerup -= 1;
-						
-						chance_colocar = 10;
-					}
-					else
-					{
-						mapa += '.';
-					}
-					
-					chance_colocar += 10;
-				}
-				mapa += '\n';
-			}
-			
-			/*try{
-		        String verify, putData;
-		        File file = new File("file.txt");
-		        file.createNewFile();
-		        FileWriter fw = new FileWriter(file);
-		        BufferedWriter bw = new BufferedWriter(fw);
-		        bw.write(mapa);
-		        bw.flush();
-
-		        bw.close();
-
-		    }catch(IOException e){
-		    e.printStackTrace();
-		    }*/
-		}
+		public String Objeto;
+		public int pos_x;
+		public int pos_y;
 		
-		public static String escolher_objeto(int n_buracos, int n_inimigos, int n_teleportes, int n_ouros, int n_powerup)
+		public Elemento(String Objeto, int dimensao_x, int dimensao_y, ArrayList<Elemento> elementos)
 		{
-			ArrayList<String> roleta = new ArrayList<String>();
 			Random rnd = new Random();
+			this.Objeto = Objeto;
 			
-			for (int chance = 100; chance >= 0; ) 
+			this.pos_x = rnd.nextInt(dimensao_x);
+			this.pos_y = rnd.nextInt(dimensao_y);
+			
+			while(!validarPosicao(pos_x, pos_y, Objeto, elementos))
 			{
-				if(n_buracos > 0)
-				{
-					roleta.add("P");
-					chance -= 1;
-				}
-				if(n_inimigos > 0)
-				{
-					roleta.add("D");	
-					chance -= 1;
-				}
-				if(n_teleportes > 0)
-				{
-					roleta.add("T");
-					chance -= 1;
-				}
-				if(n_ouros > 0)
-				{
-					roleta.add("O");
-					chance -= 1;
-				}
-				if(n_powerup > 0)
-				{
-					roleta.add("P");
-					chance -= 1;
-				}
-				if(n_buracos == 0 && n_inimigos == 0 && n_teleportes == 0 && n_ouros == 0 && n_powerup == 0)
-				{
-					break;
-				}
+				this.pos_x = rnd.nextInt(dimensao_x);
+				this.pos_y = rnd.nextInt(dimensao_y);
 			}
-		
-			if(roleta.size() == 0)
-				return ".";
-			
-			int percent = rnd.nextInt(100);
-			
-			return roleta.get(percent);
 		}
+		
+		public boolean validarPosicao(int x, int y, String Objeto, ArrayList<Elemento> elementos)
+		{
+			for (Elemento elemento : elementos) {
+				if(elemento.Objeto == "H" && distanciaManhatam(x, elemento.pos_x, y, elemento.pos_y) <= 2)
+					return false;
+				if(elemento.pos_x == x && elemento.pos_y == y)
+					return false;
+				if(elemento.pos_x == 0 && elemento.pos_y == 0)
+					return false;
+				if(elemento.Objeto == Objeto)
+					if(distanciaManhatam(x, elemento.pos_x, y, elemento.pos_y) <= 2)
+						return false;
+			}
+			return true;
+		}
+		
+		public int distanciaManhatam(int x1, int x2, int y1, int y2)
+		{
+			return Math.abs(x1 - x2) + Math.abs(y1 - y2);
+		}
+	}
+	
+	public int numero_buracos;
+	public int numero_inimigos;
+	public int numero_teleportes;
+	public int numero_ouros;
+	public int numero_powerup;
+	public int dimensao_x;
+	public int dimensao_y;
+	
+	public Generator(int n_buracos, int n_inimigos, int n_teleportes, int n_ouros, int n_powerup, int dimensao_x, int dimensao_y)
+	{
+		this.numero_buracos = n_buracos;
+		this.numero_inimigos = n_inimigos;
+		this.numero_teleportes = n_teleportes;
+		this.numero_ouros = n_ouros;
+		this.numero_powerup = n_powerup;
+		this.dimensao_x = dimensao_x;
+		this.dimensao_y = dimensao_y;
+	}
+	
+	public void GerarMapa() 
+	{
+		String mapa = "";
+		int n_buracos= this.numero_buracos;
+		int n_inimigos= this.numero_inimigos;
+		int n_teleportes= this.numero_teleportes;
+		int n_ouros= this.numero_ouros;
+		int n_powerup= this.numero_powerup;
+		ArrayList<Elemento> elementos = new ArrayList<Elemento>();
+		
+		for (int i = 0; i < n_buracos; i++) {
+			Elemento e = new Elemento("P", dimensao_x, dimensao_y, elementos);
+			elementos.add(e);
+		}
+		for (int i = 0; i < n_inimigos; i++) {
+			if(i%2 == 0)
+			{
+				Elemento e = new Elemento("D", dimensao_x, dimensao_y, elementos);
+				elementos.add(e);
+			}
+			else
+			{
+				Elemento e = new Elemento("d", dimensao_x, dimensao_y, elementos);
+				elementos.add(e);
+			}
+		}
+		for (int i = 0; i < n_teleportes; i++) {
+			Elemento e = new Elemento("T", dimensao_x, dimensao_y, elementos);
+			elementos.add(e);
+		}
+		for (int i = 0; i < n_ouros; i++) {
+			Elemento e = new Elemento("O", dimensao_x, dimensao_y, elementos);
+			elementos.add(e);
+		}
+		for (int i = 0; i < n_powerup; i++) {
+			Elemento e = new Elemento("U", dimensao_x, dimensao_y, elementos);
+			elementos.add(e);
+		}
+		
+		Elemento inicio = new Elemento("H", dimensao_x, dimensao_y, elementos);
+		elementos.add(inicio);
+		
+		boolean flag_add;
+		
+		for (int i = 0; i < this.dimensao_y; i++) 
+		{
+			for (int j = 0; j < this.dimensao_x; j++) 
+			{
+				
+				flag_add = true;
+				
+				for (Elemento elemento : elementos) 
+				{
+					if(elemento.pos_x == j && elemento.pos_y == i)
+					{
+						mapa += elemento.Objeto;
+						elementos.remove(elemento);
+						flag_add = false;
+						break;
+					}
+				}
+				
+				if(flag_add)
+					mapa += ".";
+			}
+			mapa += "\r\n";
+		}
+		
+		System.out.println(mapa);
+		
+		try{
+	        String verify, putData;
+	        File file = new File("map/map.txt");
+	        file.createNewFile();
+	        FileWriter fw = new FileWriter(file);
+	        BufferedWriter bw = new BufferedWriter(fw);
+	        bw.write(mapa);
+	        bw.flush();
+
+	        bw.close();
+
+	    }catch(IOException e){
+	    e.printStackTrace();
+	    }
+	}
 }

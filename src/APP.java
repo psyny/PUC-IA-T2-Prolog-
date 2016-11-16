@@ -21,14 +21,15 @@ public class APP extends JFrame {
 	public static void main(String[] args) throws InterruptedException {
 		System.out.println("Programa iniciado");
 		
-		/*Generator.numero_buracos = 8;
-		Generator.dimensao_x = 12;
-		Generator.dimensao_y = 12;
-		Generator.numero_inimigos = 4;
-		Generator.numero_ouros = 3;
-		Generator.numero_powerup = 3;
-		Generator.numero_teleportes = 3;
-		Generator.GerarMapa();*/
+		Generator g = new Generator(8, 4, 4, 3, 3, 12, 12);
+		try
+		{
+			//g.GerarMapa();
+		}
+		catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		// Splash Screen
 		Splash.start();
@@ -67,14 +68,10 @@ public class APP extends JFrame {
     	
     	//DebugMap.setFrontinerAround( Singletons.heroPosition );
     	
-    
-    	
-    	
     	Prolog.start();
     	while( 1 == 1 ) {
     		Prolog.doStep();
     	}
-    	
     	
     	/*
     	DebugMap.discoverEntireMap();
