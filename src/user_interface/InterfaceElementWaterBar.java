@@ -50,7 +50,7 @@ public class InterfaceElementWaterBar extends InterfaceElement {
 	
 		this.setWater( Singletons.waterCatched );
 	
-		if( this.catched <= 0 ) { 
+		if( this.catched <= 5 ) { 
 			this.qtdLabel.setVisible(false);
 			for( int i = 0 ; i < this.spriteList.size() ; i++ ) {
 				if( i < this.catched ) {
