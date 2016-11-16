@@ -13,6 +13,8 @@
 :- 	dynamic	fronteira/2.
 :-  dynamic certeza/2.
 :-	dynamic observado/2.
+:-	dynamic esta_atirando/1.
+:-	dynamic dano_dado/1.
 
 :- 	dynamic consumido/2.
 
@@ -26,8 +28,10 @@ acao(decidir) :-	energia(V), V =< 50, ( posicao(X, Y), certeza( ( X , Y ) , powe
 acao(decidir) :-	agente_olhando_para( X , Y ) , fronteira( X , Y ) , limpa_proximo_passo() , adiciona_proximo_passo((X, Y), 1 , mover ) , !.
 acao(decidir) :-	( fronteira( _ , _ ) , limpa_proximo_passo(), encontrar_mais_proximo() ), !.
 acao(decidir) :-	sensor( ( _ , _ ) , ( _ , _ ) , inimigo(_,_)), limpa_proximo_passo(), encontrar_mais_proximo( inimigo(_,_) , mover ) , !.
-acao(decidir) :-	certeza( ( _ , _ ) , inimigo(_,_) ), municao(X), X == 5, limpa_proximo_passo(), encontrar_mais_proximo( inimigo(_,_) , atirar ) , !.
-acao(decidir) :-	score(X), X > 1500, limpa_proximo_passo(), certeza( (Z, W) , saida ), adiciona_proximo_passo((Z, W), 0 , sair ) , ! .
+acao(decidir) :-	certeza( ( _ , _ ) , inimigo(_,_) ), esta_atirando(sim), limpa_proximo_passo(), encontrar_mais_proximo( inimigo(_,_), atirar ) , !.
+acao(decidir) :-	certeza( ( _ , _ ) , inimigo(_,_) ), municao(X), X >= 3, not(esta_atirando(sim)), limpa_proximo_passo(), encontrar_mais_proximo( inimigo(_,_), atirar ) , !.
+acao(decidir) :-	certeza( ( _ , _ ) , inimigo(_,_) ), limpa_proximo_passo(), encontrar_mais_proximo( inimigo(_,_) ) , !.
+acao(decidir) :-	score(X), X > 1500, certeza( (Z, W) , saida ), limpa_proximo_passo(), adiciona_proximo_passo((Z, W), 0 , sair ) , ! .
 acao(decidir) :-	sensor( ( _ , _ ) , ( _ , _ ) , teleporte), limpa_proximo_passo(), encontrar_mais_proximo( teleporte , mover ) , !.
 
 acao(mover_para_frente) :- 	mover(Z,W) , adiciona_a_score(-1) , ( consequencias() ; true ) , observar(Z,W) , !.
@@ -42,7 +46,7 @@ acao(pegar_objeto) :- posicao( X , Y ), possui_objeto( X , Y , power_up ) ,  rec
 
 acao(subir) :- posicao( X , Y ), mapa_real( ( X, Y ) , saida ) , termina(saiu_do_labirinto).
 
-acao(atirar) :-	municao( X ) , X > 0 , adiciona_a_score( -10 ) , simula_tiro() , remove_municao().
+acao(atirar) :-	municao( X ) , X > 0 , adiciona_a_score( -10 ) , remove_municao(), simula_tiro() .
 
 consequencias() :- posicao( X , Y ) , possui_objeto( X , Y , Objeto ) , Objeto = buraco , adiciona_a_score( -1000 ) , assert( consumido( X , Y ) ) , termina( morreu_para_buraco ).
 consequencias()	:- posicao( X , Y ) , possui_objeto( X , Y , Objeto ) , Objeto = inimigo( D , _ ) , tomar_dano( D ).
@@ -51,14 +55,15 @@ consequencias()	:- posicao( X , Y ) , observar( X , Y ).
 
 simula_tiro() :- agente_olhando_para( X , Y ) , mapa_real( ( X , Y ) , inimigo( _ , _ ) ) , dar_dano_inimigo( X , Y ).
 
-dar_dano_inimigo(X, Y) :-	mapa_real( ( X , Y ), inimigo( D , V ) ) , Dano is ( random( 30 ) + 20 ) , W is V - Dano, remove_mapa_real( X, Y ) , assert( consumido( X , Y ) ) , ( ( W > 0, extern_adicionar_ao_mapa( ( X , Y ) , inimigo( D , W ) ) ) ; true ) , ! .
+dar_dano_inimigo(X, Y) :-	mapa_real( ( X , Y ), inimigo( D , V ) ) , Dano is ( random( 30 ) + 20 ), assert(dano_dado(Dano)) , W is V - Dano, remove_mapa_real( X, Y ) , ( ( W > 0, adicionar_esta_atirando(), extern_adicionar_ao_mapa( ( X , Y ) , inimigo( D , W ) ) ) ; assert( fronteira( X, Y ) ), remove_esta_atirando(), assert( consumido( X , Y ) ),  true ) , ! .
+
+adicionar_esta_atirando() :-	( esta_atirando(sim) ; assert(esta_atirando(sim)) ) , !.
+remove_esta_atirando() :-	( ( esta_atirando(sim) , retract(esta_atirando(sim)) ) ; true ) , !.
 
 agente_olhando_para(X, Y) :-	orientacao(cima), posicao(Z, W), X is Z, Y is W + 1, (eh_no_mapa(X, Y) ; write('Parede')), !.
 agente_olhando_para(X, Y) :-	orientacao(baixo), posicao(Z, W), X is Z, Y is W - 1, (eh_no_mapa(X, Y) ; write('Parede')), !.
 agente_olhando_para(X, Y) :-	orientacao(direita), posicao(Z, W), X is Z + 1, Y is W, (eh_no_mapa(X, Y) ; write('Parede')), !.
-agente_olhando_para(X, Y) :-	orientacao(esquerda), posicao(Z, W), X is Z - 1, Y is W, (eh_no_mapa(X, Y) ; write('Parede')), !.
-	
-	
+agente_olhando_para(X, Y) :-	orientacao(esquerda), posicao(Z, W), X is Z - 1, Y is W, (eh_no_mapa(X, Y) ; write('Parede')), !.	
 							
 % Observa e sente uma região
 											
@@ -210,7 +215,7 @@ encontrar_mais_proximo( Objeto, Tipo ) :-	findall(_,menor_distancia( Objeto, Tip
 menor_distancia() 			:-	fronteira( X , Y ) , posicao(Z, W), distancia_manhatam( ( Z , W ) , ( X , Y ) , Custo ) , adiciona_proximo_passo( ( X , Y ) , Custo , mover ).
 menor_distancia( Objeto ) 	:-	certeza( ( X , Y ) , Objeto ) , posicao( Z , W ), distancia_manhatam( ( Z , W ) , ( X , Y ) , Custo ) , adiciona_proximo_passo( ( X , Y ) , Custo , mover ).
 menor_distancia( Objeto, mover ) 	:-	sensor( ( _ , _ ) , ( X , Y ) , Objeto ) , posicao( Z , W ), distancia_manhatam( ( Z , W ) , ( X , Y ) , Custo ) , adiciona_proximo_passo( ( X , Y ) , Custo , mover ).
-menor_distancia( Objeto, atirar ) 	:-	certeza( ( X , Y ) , Objeto ) , posicao( Z , W ), distancia_manhatam( ( Z , W ) , ( X , Y ) , Custo ) , adiciona_proximo_passo( ( X , Y ) , Custo , mover ).
+menor_distancia( Objeto, atirar ) 	:-	certeza( ( X , Y ) , Objeto ) , posicao( Z , W ), distancia_manhatam( ( Z , W ) , ( X , Y ) , Custo ) , adiciona_proximo_passo( ( X , Y ) , Custo , atirar ).
 
 mover(Z,W)		:- orientacao(direita), posicao(X, Y), Z is X + 1, W is Y, eh_no_mapa(Z, W), atualizar_posicao(Z, W), !.
 mover(Z,W)		:- orientacao(esquerda), posicao(X, Y), Z is X - 1, W is Y, eh_no_mapa(Z, W), atualizar_posicao(Z, W), !.
