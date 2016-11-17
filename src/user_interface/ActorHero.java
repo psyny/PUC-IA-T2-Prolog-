@@ -55,7 +55,18 @@ public class ActorHero extends Actor {
 		this.destroyEffect = EffectType.EXPLOSION_LARGE;
 	}
 	
-
+	public void instantTurn() {
+		this.setOrtogonalDirection( Singletons.heroDirection , true );
+		this.moveSpeed = 0;
+		this.state = MoveState.STOPED;
+	}
+	
+	public void instantMove() {
+		DVector2D pos = Singletons.sceneGrid.getTileCenterRealPosition( Singletons.heroPosition.x , Singletons.heroPosition.y );
+		this.setRealPosition( pos.x , pos.y );
+		this.moveSpeed = 0;
+		this.state = MoveState.STOPED;
+	}
 	
 	public void setDirection( int dir ) {
 		if( dir < 1 ) {

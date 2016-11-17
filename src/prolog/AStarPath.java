@@ -20,6 +20,9 @@ public class AStarPath {
 	
 	public int			clusterCellsCleared = 0;
 	
+	public int 			cellsDiscovered;
+	public int			cellsWalked;
+	
 	
 	public void addToPath( AStarPath aPath ) {
 		this.cellList.addAll( aPath.cellList );

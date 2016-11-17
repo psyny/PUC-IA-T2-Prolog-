@@ -63,6 +63,11 @@ public class AStar {
 				aspath.clusterCellsCleared++;
 			}
 			
+			if( tCell.frontier == true ) {
+				aspath.cellsDiscovered++;
+			}
+			aspath.cellsWalked++;
+			
 			aspath.cellList.add( 0 , tCell );
 			tCell = tCell.ASData.predecessor;
 		}
@@ -138,6 +143,8 @@ public class AStar {
 				}
 			}
 		}
+		
+		
 		
 
 		// Calculate new cell data

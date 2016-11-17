@@ -147,7 +147,8 @@ public class Prolog {
 		bestPathClustered = null;	
 		Singletons.gameGrid.calculateClustering();	
 		for( AStarPath aPath : pathList ) {
-			aPath.clusteredCost = aPath.cost - ( Singletons.gameGrid.getCell( aPath.destiny.x , aPath.destiny.y ).clusterWeight  );
+			aPath.clusteredCost = aPath.cost - ( Singletons.gameGrid.getCell( aPath.destiny.x , aPath.destiny.y ).clusterWeight * 2 );
+			
 			if( bestPathClustered == null ) {
 				bestPathClustered = aPath;
 			} else if( bestPathClustered.clusteredCost > aPath.clusteredCost ) {
@@ -199,6 +200,11 @@ public class Prolog {
 				
 				switch( cmd ) {
 					case TURN:
+						if( Singletons.animated == false ) {
+							Singletons.hero.instantTurn();
+							break;
+						}	
+						
 						// Check turn Type
 						if( turnType == 0 ) {
 							if( i+1 < bestPathRaw.commandList.size() && bestPathRaw.commandList.get(i+1) == Commands.TURN ) {
@@ -259,6 +265,11 @@ public class Prolog {
 						break;
 						
 					case MOVE:
+						if( Singletons.animated == false ) {
+							Singletons.hero.instantMove();
+							break;
+						}			
+						
 						DVector2D target = IsoGrid.getTileCenterRealPosition( Singletons.heroPosition.x , Singletons.heroPosition.y );
 						turnType = 0;
 						

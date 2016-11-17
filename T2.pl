@@ -33,6 +33,7 @@ acao(decidir) :-	certeza( ( _ , _ ) , inimigo(_,_) ), municao(X), X >= 3, not(es
 acao(decidir) :-	certeza( ( _ , _ ) , inimigo(_,_) ), limpa_proximo_passo(), encontrar_mais_proximo( inimigo(_,_) ) , !.
 acao(decidir) :-	score(X), X > 1500, certeza( (Z, W) , saida ), limpa_proximo_passo(), adiciona_proximo_passo((Z, W), 0 , sair ) , ! .
 acao(decidir) :-	sensor( ( _ , _ ) , ( _ , _ ) , teleporte), limpa_proximo_passo(), encontrar_mais_proximo( teleporte , mover ) , !.
+acao(decidir) :-	limpa_proximo_passo(), certeza( (Z, W) , saida ), adiciona_proximo_passo((Z, W), 0 , sair ) , !.
 
 acao(mover_para_frente) :- 	mover(Z,W) , adiciona_a_score(-1) , ( consequencias() ; true ) , observar(Z,W) , !.
 

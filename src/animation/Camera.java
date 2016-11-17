@@ -87,7 +87,7 @@ public class Camera extends JScrollPane implements Runnable , MouseMotionListene
 	    		this.cameraPosition.x = rPos.x;
 	    		this.cameraPosition.y = rPos.y;
     		}
-    		this.getViewport().setViewPosition( new Point( (int)this.cameraPosition.x , (int)this.cameraPosition.y ));
+    		this.getViewport().setViewPosition( new Point( (int)this.cameraPosition.x , (int)this.cameraPosition.y ));		
     	} else if( this.fixedTarget == true ) {
 	    	// Set Position
 	    	DVector2D offset = new DVector2D( this.getSize().getWidth() / 2 , this.getSize().getHeight() / 2 );
@@ -105,51 +105,55 @@ public class Camera extends JScrollPane implements Runnable , MouseMotionListene
 			} else if ( effectiveTarget.y > 100000 ) {
 				effectiveTarget.y = 100000;
 			} 
-	    	
-	    	// Calculate Move Speed
-	    	DVector2D distance = DVector2D.getDistanceVector( this.cameraPosition , effectiveTarget );
-	    	if( distance.getModulus() > 1 ) {
-	    		DVector2D moveSpeed = new DVector2D( distance.x / 50 , distance.y / 50 );
-	    		distance.normalize();
-	    		int xDir = 1;
-	    		int yDir = 1;
-	    		
-	    		
-	    		if( Math.abs( this.cameraPosition.x - effectiveTarget.x ) >= 1 ) {
-	    			if( moveSpeed.x < 0 ) {
-	    				xDir = -1;
-	    			}
-	    			
-		    		if( Math.abs(moveSpeed.x) < this.minMoveSpeed ) {
-		    			moveSpeed.x = this.minMoveSpeed * xDir;
-		    		} else if ( Math.abs(moveSpeed.x) > this.maxMoveSpeed ) {
-		    			moveSpeed.x = this.maxMoveSpeed * xDir;
-		    		}
-	    		} else {
-	    			moveSpeed.x = 0;
-	    		}	
-	    		
-	    		if( Math.abs( this.cameraPosition.y - effectiveTarget.y ) >= 1 ) {
-	    			if( moveSpeed.y < 0 ) {
-	    				yDir = -1;
-	    			}
-	    			
-		    		if( Math.abs(moveSpeed.y) < this.minMoveSpeed ) {
-		    			moveSpeed.y = this.minMoveSpeed * yDir;
-		    		} else if ( Math.abs(moveSpeed.y) > this.maxMoveSpeed ) {
-		    			moveSpeed.y = this.maxMoveSpeed * yDir;
-		    		}
-	    		} else {
-	    			moveSpeed.y = 0;
-	    		}
-	
-	    		this.cameraPosition.x += moveSpeed.x ;
-	    		this.cameraPosition.y +=  moveSpeed.y ;
-	    	} else {
+			
+			if( Singletons.animated == false ) {
 	    		this.cameraPosition.x = effectiveTarget.x;
 	    		this.cameraPosition.y = effectiveTarget.y;
-	    	}
-    		
+			} else {
+		    	// Calculate Move Speed
+		    	DVector2D distance = DVector2D.getDistanceVector( this.cameraPosition , effectiveTarget );
+		    	if( distance.getModulus() > 1 ) {
+		    		DVector2D moveSpeed = new DVector2D( distance.x / 50 , distance.y / 50 );
+		    		distance.normalize();
+		    		int xDir = 1;
+		    		int yDir = 1;
+		    		
+		    		
+		    		if( Math.abs( this.cameraPosition.x - effectiveTarget.x ) >= 1 ) {
+		    			if( moveSpeed.x < 0 ) {
+		    				xDir = -1;
+		    			}
+		    			
+			    		if( Math.abs(moveSpeed.x) < this.minMoveSpeed ) {
+			    			moveSpeed.x = this.minMoveSpeed * xDir;
+			    		} else if ( Math.abs(moveSpeed.x) > this.maxMoveSpeed ) {
+			    			moveSpeed.x = this.maxMoveSpeed * xDir;
+			    		}
+		    		} else {
+		    			moveSpeed.x = 0;
+		    		}	
+		    		
+		    		if( Math.abs( this.cameraPosition.y - effectiveTarget.y ) >= 1 ) {
+		    			if( moveSpeed.y < 0 ) {
+		    				yDir = -1;
+		    			}
+		    			
+			    		if( Math.abs(moveSpeed.y) < this.minMoveSpeed ) {
+			    			moveSpeed.y = this.minMoveSpeed * yDir;
+			    		} else if ( Math.abs(moveSpeed.y) > this.maxMoveSpeed ) {
+			    			moveSpeed.y = this.maxMoveSpeed * yDir;
+			    		}
+		    		} else {
+		    			moveSpeed.y = 0;
+		    		}
+		
+		    		this.cameraPosition.x += moveSpeed.x ;
+		    		this.cameraPosition.y +=  moveSpeed.y ;
+		    	} else {
+		    		this.cameraPosition.x = effectiveTarget.x;
+		    		this.cameraPosition.y = effectiveTarget.y;
+		    	}
+			}
     		// Finally Set   
     		this.getViewport().setViewPosition( new Point( (int)this.cameraPosition.x , (int)this.cameraPosition.y ));
     	}

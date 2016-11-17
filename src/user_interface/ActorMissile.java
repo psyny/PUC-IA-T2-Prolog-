@@ -25,7 +25,7 @@ public class ActorMissile extends Actor {
 	
 	
 	private double defaultMoveSpeed = 15;
-	private double defaultTurnSpeed = 0.07;
+	private double defaultTurnSpeed = 0.2;
 	private double turnSpeedFactor = 1;
 	
 	public double acceleration = 0;
@@ -57,14 +57,17 @@ public class ActorMissile extends Actor {
 		this.setTargetPosition( target.x , target.y );
 		
 		// Add Chaos
+		/*
 		DVector2D dirVector = DVector2D.getDistanceVector( origin , target );
 		double targetDirection = dirVector.getDirectionRAD();
 		targetDirection = this.normalizeRad( targetDirection - (Math.PI * 0.3 ) + ( Math.random() * Math.PI * 0.6 ) ); 
+		this.driftDirection = targetDirection;
 		this.setMoveDirection( targetDirection  );
+		*/
+		
 		
 		this.moveSpeed = this.defaultMoveSpeed;
 		this.maxMoveSpeed = this.defaultMoveSpeed;
-
 		
 		Singletons.actorScene.addActor( this , 20 );
 	}
@@ -201,7 +204,7 @@ public class ActorMissile extends Actor {
 		}
 		
 		DVector2D dirVector = DVector2D.getDistanceVector( this.realPosition , targetPosition );
-		double targetDirection = dirVector.getDirectionRAD();
+		double nowTargetdirection = dirVector.getDirectionRAD();
 		double dirMod = dirVector.getModulus();
 		
 		if( dirMod < this.moveSpeed ) {
@@ -210,15 +213,28 @@ public class ActorMissile extends Actor {
 			this.feedBack.shotsOnTheFly--;
 			this.destroyFx();
 		} else {
-			this.setMoveDirection( targetDirection  );
+			/*
+			double diff = nowTargetdirection - this.driftDirection;
+			double turn = ( this.defaultTurnSpeed * this.turnSpeedFactor );
+
+			if( Math.abs( this.normalizeRad(diff)) < turn ) {
+				this.driftDirection = this.normalizeRad( nowTargetdirection );
+			} else {
+				turn *= this.getTurnDirection(diff);
+				this.driftDirection = this.normalizeRad( this.driftDirection + ( turn ) );
+			}
 			
-			this.driftDirection = this.moveDirection;
+			this.setMoveDirection( this.driftDirection  );
+			*/
 			
+			this.setMoveDirection( nowTargetdirection );
+			
+			// Speed;
 			if( this.moveSpeed > this.maxMoveSpeed ) {
 				this.moveSpeed = this.maxMoveSpeed;
 			}
 			
-
+			// Effect
 			this.particleCounter_dirt += time * 1;	
 		}	
 	

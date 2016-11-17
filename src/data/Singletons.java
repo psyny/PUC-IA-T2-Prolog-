@@ -17,6 +17,7 @@ public class Singletons {
 	public static UpdateLinker 	updateLinker = null;	
 	public static ActorHero		hero = null;	
 	public static ActorStorm 	stormGroup = null;
+	public static boolean		animated = true;
 	
 	public static boolean 	randomMap		= false;
 	

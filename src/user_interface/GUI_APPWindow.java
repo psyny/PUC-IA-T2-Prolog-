@@ -267,7 +267,7 @@ class MenuView extends JMenu {
 class MenuControl extends JMenu {
 	class CB_Pause extends JCheckBoxMenuItem implements ItemListener  {
 		public CB_Pause( ) {
-			super( "Pausar");
+			super( "Pausar <SpaceBar>");
 			this.addItemListener(this);
 			this.setState( true );
 			
@@ -283,10 +283,27 @@ class MenuControl extends JMenu {
 		}
 	}
 	
+	
+	class CB_Animated extends JCheckBoxMenuItem implements ItemListener  {
+		public CB_Animated( ) {
+			super( "Animado");
+			this.addItemListener(this);
+			this.setState( true );
+			
+			Singletons.animated = this.getState();	
+		}
+		
+		@Override
+		public void itemStateChanged(ItemEvent arg0) {
+			Singletons.animated = this.getState();
+		}
+	}	
+	
 	// Constructor
 	public MenuControl( ) {
 		super( "Controle" );
 		this.add( new CB_Pause() );
+		this.add( new CB_Animated() );		
 	}
 }
 

@@ -79,7 +79,7 @@ public class Translations {
 				break;
 			
 			case ENEMY:
-				msg = "inimigo(20,50)";
+				msg = "inimigo(20,100)";
 				break;
 				
 			default:
